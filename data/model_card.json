@@ -1,0 +1,419 @@
+{
+  "diabetes": {
+    "name": "diabetes",
+    "features": [
+      "age",
+      "sex",
+      "bmi",
+      "waist",
+      "sbp",
+      "dbp",
+      "glucose",
+      "hba1c"
+    ],
+    "source_csv": "diabetes.csv",
+    "n_total": 11260,
+    "prevalence_pct": 19.5,
+    "auc": 0.939,
+    "auc_ci_95": [
+      0.925,
+      0.952
+    ],
+    "cv_auc_mean": 0.937,
+    "cv_auc_std": 0.009,
+    "operating_points": {
+      "moderate_90pct_recall": {
+        "threshold": 0.07,
+        "accuracy": 76.4,
+        "precision": 44.9,
+        "recall": 92.5,
+        "f1": 60.5
+      },
+      "high_60pct_recall": {
+        "threshold": 0.74,
+        "accuracy": 92.2,
+        "precision": 98.9,
+        "recall": 60.8,
+        "f1": 75.3
+      }
+    },
+    "cross_cycle_validation": null,
+    "subgroup_auc": {
+      "sex_female": {
+        "n": 1153,
+        "auc": 0.927
+      },
+      "sex_male": {
+        "n": 1099,
+        "auc": 0.952
+      },
+      "age_under_50": {
+        "n": 1099,
+        "auc": 0.922
+      },
+      "age_50plus": {
+        "n": 1153,
+        "auc": 0.917
+      }
+    },
+    "decision_curve": {
+      "thresholds": [
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.6
+      ],
+      "model": [
+        0.1537,
+        0.1421,
+        0.1365,
+        0.13,
+        0.127,
+        0.1192
+      ],
+      "treat_all": [
+        0.1055,
+        -0.0063,
+        -0.1501,
+        -0.3418,
+        -0.6101,
+        -1.0127
+      ],
+      "treat_none": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "known_limitations": [
+      "Glucose and HbA1c are both in the label definition and the feature set: the model partly reads the lab report that defines the label.",
+      "No cross-cycle validation available (single combined cohort)."
+    ]
+  },
+  "heart": {
+    "name": "heart",
+    "features": [
+      "age",
+      "sex",
+      "bmi",
+      "sbp",
+      "dbp",
+      "chol",
+      "hdl",
+      "trig",
+      "hba1c",
+      "crp",
+      "smoker",
+      "diabetes",
+      "active_days",
+      "bp_diagnosed",
+      "family_hx"
+    ],
+    "source_csv": "heart.csv",
+    "n_total": 11287,
+    "prevalence_pct": 8.2,
+    "auc": 0.868,
+    "auc_ci_95": [
+      0.847,
+      0.891
+    ],
+    "cv_auc_mean": 0.867,
+    "cv_auc_std": 0.007,
+    "operating_points": {
+      "moderate_90pct_recall": {
+        "threshold": 0.06,
+        "accuracy": 71.6,
+        "precision": 21.2,
+        "recall": 90.3,
+        "f1": 34.4
+      },
+      "high_60pct_recall": {
+        "threshold": 0.17,
+        "accuracy": 85.5,
+        "precision": 30.7,
+        "recall": 60.8,
+        "f1": 40.8
+      }
+    },
+    "cross_cycle_validation": {
+      "train": "I",
+      "test": "J",
+      "n_train": 4603,
+      "n_test": 1142,
+      "auc": 0.853
+    },
+    "subgroup_auc": {
+      "sex_female": {
+        "n": 1148,
+        "auc": 0.86
+      },
+      "sex_male": {
+        "n": 1110,
+        "auc": 0.866
+      },
+      "age_under_50": {
+        "n": 1084,
+        "auc": 0.901
+      },
+      "age_50plus": {
+        "n": 1174,
+        "auc": 0.789
+      }
+    },
+    "decision_curve": {
+      "thresholds": [
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.6
+      ],
+      "model": [
+        0.044,
+        0.0203,
+        0.0094,
+        0.0018,
+        0.0004,
+        0.0
+      ],
+      "treat_all": [
+        -0.0196,
+        -0.147,
+        -0.3109,
+        -0.5294,
+        -0.8353,
+        -1.2941
+      ],
+      "treat_none": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "known_limitations": [
+      "Label is self-reported heart disease from a survey \u2014 noisy (people forget or were never diagnosed).",
+      "High-band precision is inherently lower than other models because the label itself is imprecise."
+    ]
+  },
+  "kidney": {
+    "name": "kidney",
+    "features": [
+      "age",
+      "sex",
+      "bun",
+      "acr",
+      "sbp",
+      "uric_acid",
+      "albumin",
+      "potassium",
+      "calcium",
+      "phosphorus",
+      "chloride",
+      "hba1c",
+      "diabetes",
+      "htn"
+    ],
+    "source_csv": "kidney.csv",
+    "n_total": 10064,
+    "prevalence_pct": 8.2,
+    "auc": 0.937,
+    "auc_ci_95": [
+      0.919,
+      0.951
+    ],
+    "cv_auc_mean": 0.937,
+    "cv_auc_std": 0.015,
+    "operating_points": {
+      "moderate_90pct_recall": {
+        "threshold": 0.06,
+        "accuracy": 82.9,
+        "precision": 31.0,
+        "recall": 90.2,
+        "f1": 46.2
+      },
+      "high_60pct_recall": {
+        "threshold": 0.26,
+        "accuracy": 93.7,
+        "precision": 61.5,
+        "recall": 60.4,
+        "f1": 60.9
+      }
+    },
+    "cross_cycle_validation": {
+      "train": "I",
+      "test": "J",
+      "n_train": 4105,
+      "n_test": 970,
+      "auc": 0.911
+    },
+    "subgroup_auc": {
+      "sex_female": {
+        "n": 1049,
+        "auc": 0.94
+      },
+      "sex_male": {
+        "n": 964,
+        "auc": 0.935
+      },
+      "age_under_50": {
+        "n": 966,
+        "auc": 0.993
+      },
+      "age_50plus": {
+        "n": 1047,
+        "auc": 0.876
+      }
+    },
+    "decision_curve": {
+      "thresholds": [
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.6
+      ],
+      "model": [
+        0.0534,
+        0.0409,
+        0.0353,
+        0.0285,
+        0.0243,
+        0.0194
+      ],
+      "treat_all": [
+        -0.0206,
+        -0.1482,
+        -0.3122,
+        -0.5309,
+        -0.8371,
+        -1.2963
+      ],
+      "treat_none": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "known_limitations": [
+      "Label is eGFR < 60 (KDIGO stage 3a+), which is itself a derived quantity. Creatinine was deliberately excluded from the feature set to avoid a direct label leak."
+    ]
+  },
+  "fattyliver": {
+    "name": "fattyliver",
+    "features": [
+      "age",
+      "sex",
+      "alt",
+      "ast",
+      "alp",
+      "ggt",
+      "bili",
+      "albumin",
+      "hdl",
+      "glucose",
+      "tg_hdl_ratio",
+      "diabetes"
+    ],
+    "source_csv": "fattyliver.csv",
+    "n_total": 4198,
+    "prevalence_pct": 46.6,
+    "auc": 0.843,
+    "auc_ci_95": [
+      0.814,
+      0.867
+    ],
+    "cv_auc_mean": 0.821,
+    "cv_auc_std": 0.009,
+    "operating_points": {
+      "moderate_90pct_recall": {
+        "threshold": 0.32,
+        "accuracy": 74.2,
+        "precision": 66.4,
+        "recall": 90.0,
+        "f1": 76.4
+      },
+      "high_60pct_recall": {
+        "threshold": 0.55,
+        "accuracy": 74.2,
+        "precision": 79.0,
+        "recall": 60.6,
+        "f1": 68.6
+      }
+    },
+    "cross_cycle_validation": {
+      "train": "I",
+      "test": "J",
+      "n_train": 1644,
+      "n_test": 436,
+      "auc": 0.852
+    },
+    "subgroup_auc": {
+      "sex_female": {
+        "n": 434,
+        "auc": 0.827
+      },
+      "sex_male": {
+        "n": 406,
+        "auc": 0.857
+      },
+      "age_under_50": {
+        "n": 394,
+        "auc": 0.878
+      },
+      "age_50plus": {
+        "n": 446,
+        "auc": 0.808
+      }
+    },
+    "decision_curve": {
+      "thresholds": [
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.6
+      ],
+      "model": [
+        0.4114,
+        0.3676,
+        0.3255,
+        0.2778,
+        0.2036,
+        0.1577
+      ],
+      "treat_all": [
+        0.4061,
+        0.3318,
+        0.2364,
+        0.1091,
+        -0.069,
+        -0.3363
+      ],
+      "treat_none": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "known_limitations": [
+      "Label is Fatty Liver Index (FLI) \u2265 60, a validated proxy score, not an ultrasound or FibroScan diagnosis. TG, BMI, and waist are excluded from features because they define FLI \u2014 that would be a label leak."
+    ]
+  }
+}
