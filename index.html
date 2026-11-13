@@ -1,0 +1,1147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f7f9f7">
+<title>Parakh — Lifestyle disease screening</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#142033;--ink2:#54677a;--ink3:#8a97a5;
+  --teal:#1f6b6a;--teal-d:#154b4a;--teal-p:rgba(31,107,106,.10);
+  --amber:#b45309;--amber-p:rgba(180,83,9,.10);
+  --brick:#a12824;--brick-p:rgba(161,40,36,.10);
+  --green:#15803d;--green-p:rgba(21,128,61,.10);
+  --border:rgba(20,32,51,.10);--border2:rgba(20,32,51,.06);
+  --glass:rgba(255,255,255,.62);
+  --glass-strong:rgba(255,255,255,.82);
+  --glass-border:rgba(255,255,255,.7);
+  --serif:"Fraunces",Georgia,serif;
+  --sans:"Inter",-apple-system,system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --bounce:cubic-bezier(.34,1.56,.64,1);
+}
+*{box-sizing:border-box}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{
+  margin:0;color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  text-rendering:optimizeLegibility;
+  background:
+    radial-gradient(900px 600px at 8% -5%,rgba(31,107,106,.09),transparent 60%),
+    radial-gradient(800px 500px at 100% 15%,rgba(180,83,9,.06),transparent 55%),
+    radial-gradient(700px 700px at 50% 110%,rgba(31,107,106,.05),transparent 55%),
+    linear-gradient(180deg,#f2f6f1 0%,#eaf0ea 100%);
+  background-attachment:scroll;
+  min-height:100vh;
+}
+/* text scale via zoom — reliable with px sizes */
+body.ts-large{zoom:1.12}
+body.ts-xlarge{zoom:1.25}
+body.hc{
+  --ink:#000;--ink2:#1a1a1a;--ink3:#333;
+  --border:rgba(0,0,0,.28);--border2:rgba(0,0,0,.15);
+  --glass:rgba(255,255,255,.94);--glass-strong:rgba(255,255,255,.97);
+  --glass-border:rgba(0,0,0,.18);
+}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:500;letter-spacing:-.015em;margin:0;line-height:1.2}
+p{margin:0 0 1em}
+a{color:var(--teal-d);text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* force GPU layer on glass + transformed elements (fixes fuzzy text) */
+.cond,.preview,.checker-card,.stat,.step,.pcard,.mtable,.not,.a11y-bar,.modal,.result{
+  -webkit-backface-visibility:hidden;backface-visibility:hidden;
+  -webkit-transform-style:preserve-3d;transform-style:preserve-3d;
+}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:50;background:rgba(238,242,236,.94);border-bottom:1px solid var(--border)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px}
+.brand{display:flex;align-items:baseline;gap:10px;font-family:var(--serif);font-size:22px;font-weight:600}
+.brand-dot{width:10px;height:10px;border-radius:50%;background:var(--teal);position:relative;top:-2px;box-shadow:0 0 0 3px var(--teal-p)}
+.brand-alt{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--ink2)}
+.nav-right{display:flex;gap:10px;align-items:center}
+.btn-lang{padding:9px 18px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.55);color:var(--ink2);font:600 13px var(--sans);min-height:40px;transition:border-color .2s,color .2s,background .2s}
+.btn-lang:hover{border-color:var(--teal);color:var(--teal-d);background:var(--teal-p)}
+.btn-em-nav{padding:9px 18px;border-radius:999px;border:0;background:var(--brick);color:#fff;font:600 13px var(--sans);min-height:40px;display:flex;align-items:center;gap:6px;transition:background .2s,transform .2s}
+.btn-em-nav:hover{background:#7a1f1c;transform:translateY(-1px)}
+@media(max-width:600px){.brand-alt{display:none}.btn-em-nav span{display:none}.btn-em-nav{padding:9px 12px;min-width:40px;justify-content:center}}
+
+/* HERO */
+.hero{padding:72px 0 56px}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center}
+@media(max-width:880px){.hero-grid{grid-template-columns:1fr;gap:36px}}
+.badge{display:inline-flex;align-items:center;gap:10px;padding:8px 16px 8px 14px;border-radius:999px;background:rgba(255,255,255,.7);border:1px solid var(--glass-border);font:600 13px var(--sans);color:var(--ink2);margin-bottom:24px;animation:fadeUp .5s ease both}
+.badge-live{width:8px;height:8px;border-radius:50%;background:var(--green);position:relative}
+.badge-live::after{content:"";position:absolute;inset:-3px;border-radius:50%;background:var(--green);opacity:.3;animation:livePulse 2s infinite}
+@keyframes livePulse{0%,100%{transform:scale(1);opacity:.3}50%{transform:scale(1.8);opacity:0}}
+.hero h1{font-size:clamp(2.2rem,4.6vw,3.4rem);line-height:1.05;margin-bottom:20px;animation:fadeUp .6s ease .05s both}
+.hero h1 em{font-style:italic;color:var(--teal-d);font-weight:500}
+.hero .lead{font-size:17px;color:var(--ink2);max-width:46ch;margin-bottom:28px;animation:fadeUp .6s ease .1s both}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;animation:fadeUp .6s ease .15s both}
+.btn-primary{padding:16px 28px;border-radius:999px;background:var(--teal);color:#fff;border:0;font:600 15px var(--sans);min-height:54px;box-shadow:0 10px 24px -12px rgba(31,107,106,.55);transition:background .2s,transform .3s var(--bounce),box-shadow .2s}
+.btn-primary:hover{background:var(--teal-d);transform:translateY(-3px) scale(1.02);box-shadow:0 16px 32px -12px rgba(31,107,106,.6)}
+.btn-primary:active{transform:translateY(0) scale(.98);transition-duration:.1s}
+.btn-ghost{padding:16px 28px;border-radius:999px;background:rgba(255,255,255,.55);color:var(--ink);border:1px solid var(--border);font:600 15px var(--sans);min-height:54px;transition:background .2s,transform .2s,border-color .2s}
+.btn-ghost:hover{background:#fff;transform:translateY(-2px);border-color:var(--ink3)}
+
+/* PREVIEW */
+.preview{padding:26px;border-radius:26px;position:relative;animation:fadeUp .7s ease .2s both;background:var(--glass);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border:1px solid var(--glass-border);box-shadow:0 4px 20px -8px rgba(20,32,51,.10)}
+.preview::after{content:"SAMPLE";position:absolute;top:14px;right:18px;font:600 9px var(--mono);letter-spacing:.22em;color:var(--ink3);opacity:.65}
+.preview-hd{display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px dashed var(--border);margin-bottom:16px}
+.preview-lbl{font:600 10.5px var(--mono);color:var(--ink3);letter-spacing:.1em;text-transform:uppercase}
+.preview-band{font:700 10.5px var(--sans);padding:5px 12px;border-radius:999px;letter-spacing:.06em;text-transform:uppercase;background:var(--amber-p);color:var(--amber);border:1px solid rgba(180,83,9,.25)}
+.preview-score{display:flex;align-items:baseline;gap:6px;margin-bottom:4px}
+.preview-score .n{font:500 48px var(--mono);letter-spacing:-.03em;line-height:1}
+.preview-score .of{font:500 18px var(--mono);color:var(--ink3)}
+.preview-desc{font:600 12.5px var(--sans);color:var(--ink2);margin-bottom:16px}
+.preview-bar{height:10px;border-radius:999px;overflow:hidden;display:flex;margin-bottom:14px;background:var(--border2)}
+.preview-bar span{flex:1}
+.preview-bar .g{background:#86c89e}.preview-bar .a{background:#eac25c}.preview-bar .r{background:#e5887a}
+.preview-rows{list-style:none;padding:0;margin:0;font-size:12.5px}
+.preview-rows li{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--border);color:var(--ink2)}
+.preview-rows li:last-child{border-bottom:0}
+.preview-rows b{font-family:var(--mono);color:var(--brick);font-weight:600}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* STATS */
+.stats{padding:14px 0}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:760px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+.stat{padding:22px 24px;border-radius:22px;background:var(--glass);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border:1px solid var(--glass-border);box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 4px 20px -8px rgba(20,32,51,.10);transition:transform .3s var(--bounce),box-shadow .3s var(--bounce)}
+.stat:hover{transform:translateY(-3px);box-shadow:0 12px 28px -12px rgba(20,32,51,.15)}
+.stat-n{font:500 32px var(--mono);letter-spacing:-.02em;color:var(--ink);line-height:1;margin-bottom:6px}
+.stat-n small{font-size:13px;color:var(--ink3);margin-left:2px}
+.stat-l{font:600 11px var(--sans);color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;line-height:1.4}
+
+/* SECTIONS */
+.section{padding:64px 0}
+.sec-head{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:end;margin-bottom:40px}
+@media(max-width:640px){.sec-head{grid-template-columns:1fr;gap:6px;margin-bottom:26px}}
+.sec-num{font:600 11px var(--mono);color:var(--ink3);letter-spacing:.16em;padding-bottom:6px;border-bottom:1px solid var(--border);min-width:76px;text-align:center;border-radius:0 0 6px 6px}
+.sec-title{font-size:clamp(1.5rem,2.5vw,1.95rem);font-weight:400;letter-spacing:-.02em}
+.sec-title em{font-style:italic;color:var(--teal-d)}
+.sec-sub{color:var(--ink2);margin:8px 0 0;font-size:15px;max-width:60ch}
+
+/* DISEASE CARDS */
+.conds{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+@media(max-width:760px){.conds{grid-template-columns:1fr}}
+.cond{padding:26px;border-radius:24px;background:var(--glass);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border:1px solid var(--glass-border);border-top:3px solid var(--c,var(--teal));box-shadow:0 2px 12px -6px rgba(20,32,51,.10);transition:transform .35s var(--bounce),box-shadow .35s var(--bounce),border-color .22s;position:relative;will-change:transform}
+.cond:hover{transform:translateY(-6px) rotate(-.8deg);box-shadow:0 18px 36px -14px rgba(20,32,51,.22);border-color:var(--c,var(--teal))}
+.cond-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.cond-icon{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:var(--c-bg);color:var(--c);transition:transform .22s}
+.cond-icon svg{width:26px;height:26px;stroke-width:2.4;transition:transform .5s var(--bounce)}
+.cond:hover .cond-icon{transform:scale(1.1)}
+.cond:hover .cond-icon svg{animation:iconWiggle .5s var(--bounce)}
+@keyframes iconWiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-10deg) scale(1.08)}55%{transform:rotate(8deg) scale(1.08)}80%{transform:rotate(-3deg) scale(1.04)}}
+.cond-auc{text-align:right}
+.cond-auc-v{font:600 20px var(--mono);color:var(--ink);line-height:1}
+.cond-auc-l{font:600 9px var(--mono);color:var(--ink3);letter-spacing:.1em;text-transform:uppercase;margin-top:3px}
+.cond h3{font-size:19px;margin-bottom:2px;font-weight:600}
+.cond-en{font:600 10.5px var(--mono);color:var(--ink3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.cond p{font-size:13.5px;color:var(--ink2);margin:0 0 12px;line-height:1.55}
+.cond-meta{font:500 11px var(--mono);color:var(--ink3);padding-top:10px;border-top:1px dashed var(--border)}
+.cond-meta b{color:var(--ink2);font-weight:600}
+.cond-cav{font-size:11.5px;color:var(--ink2);margin-top:10px;line-height:1.5;padding:9px 12px;background:var(--brick-p);border-left:2px solid var(--brick);border-radius:8px}
+
+/* A11Y BAR */
+.a11y-bar{display:flex;gap:20px;flex-wrap:wrap;padding:16px 22px;border-radius:20px;margin-bottom:20px;background:var(--glass);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border:1px solid var(--glass-border);align-items:center;box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 4px 20px -8px rgba(20,32,51,.08)}
+.a11y-group{display:flex;align-items:center;gap:6px}
+.a11y-group label{font:700 10px var(--sans);color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;margin-right:4px}
+.a11y-group button{padding:8px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.55);font:600 12.5px var(--sans);color:var(--ink2);transition:border-color .2s,color .2s,background .2s;cursor:pointer;min-height:36px}
+.a11y-group button:hover{border-color:var(--teal);color:var(--teal-d)}
+.a11y-group button.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+@media(max-width:640px){.a11y-bar{padding:14px 18px;gap:14px}.a11y-group button{padding:7px 11px;font-size:12px;min-height:34px}}
+
+/* CHECKER — bigger */
+.checker-sec{padding:56px 0}
+.checker-card{border-radius:26px;overflow:hidden;background:var(--glass-strong);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);border:1px solid var(--glass-border);box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 8px 32px -12px rgba(20,32,51,.15)}
+.tabs{display:flex;overflow-x:auto;border-bottom:1px solid var(--border);background:rgba(255,255,255,.4)}
+.tabs button{flex:1;min-width:120px;background:transparent;border:0;padding:18px 18px;font:600 14px var(--sans);color:var(--ink2);border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer;white-space:nowrap;min-height:58px;transition:color .15s,background .15s,border-color .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.tabs button:hover{color:var(--ink);background:rgba(31,107,106,.05)}
+.tabs button.active{color:var(--teal-d);border-bottom-color:var(--teal);background:rgba(255,255,255,.75)}
+.tabs svg{width:16px;height:16px}
+.mode-row{display:flex;align-items:center;gap:16px;padding:18px 28px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.35);flex-wrap:wrap}
+.mode-pill{display:inline-flex;background:rgba(238,242,236,.7);border:1px solid var(--border);border-radius:999px;padding:3px}
+.mode-pill button{padding:10px 20px;border-radius:999px;border:0;background:transparent;font:600 13px var(--sans);color:var(--ink2);transition:background .2s,color .2s;min-height:40px;display:flex;align-items:center;gap:6px}
+.mode-pill button.active{background:var(--teal);color:#fff}
+.mode-note{font:500 12px var(--mono);color:var(--ink3);flex:1;min-width:180px;line-height:1.4}
+.checker-body{display:grid;grid-template-columns:1fr 1fr;gap:0}
+@media(max-width:820px){.checker-body{grid-template-columns:1fr}}
+.form-col{padding:36px;border-right:1px solid var(--border);min-height:720px}
+@media(max-width:820px){.form-col{border-right:0;border-bottom:1px solid var(--border);min-height:auto;padding:28px}}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:520px){.field-grid{grid-template-columns:1fr}}
+.field{margin-bottom:2px}
+.field.span2{grid-column:1/-1}
+.field label{display:block;font:600 12.5px var(--sans);color:var(--ink2);margin-bottom:7px}
+.field input,.field select{width:100%;padding:14px 16px;border-radius:14px;border:1.5px solid var(--border);background:rgba(255,255,255,.7);font:400 15px var(--sans);color:var(--ink);min-height:52px;transition:border-color .2s,box-shadow .2s,background .2s}
+.field input:focus,.field select:focus{outline:0;border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-p);background:#fff}
+.field input:hover,.field select:hover{border-color:var(--ink3)}
+.ftin{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.calc-btn{width:100%;padding:20px;border-radius:16px;background:var(--teal);color:#fff;border:0;font:600 16px var(--sans);margin-top:26px;min-height:64px;box-shadow:0 12px 28px -12px rgba(31,107,106,.55);transition:transform .3s var(--bounce),background .2s,box-shadow .2s;display:flex;align-items:center;justify-content:center;gap:10px}
+.calc-btn:hover{background:var(--teal-d);transform:translateY(-2px);box-shadow:0 16px 32px -12px rgba(31,107,106,.6)}
+.calc-btn:active{transform:translateY(0) scale(.98);transition-duration:.1s}
+.calc-btn svg{width:18px;height:18px}
+.result-col{padding:36px;background:rgba(255,255,255,.5);min-height:720px;display:flex;align-items:center;justify-content:center}
+@media(max-width:820px){.result-col{min-height:auto;padding:28px}}
+.result-empty{text-align:center;color:var(--ink3);padding:20px}
+.result-empty svg{width:44px;height:44px;margin:0 auto 14px;opacity:.5;display:block}
+.result-empty p{font-size:13.5px;line-height:1.6;max-width:280px;margin:0 auto;font-style:italic}
+
+/* RESULT */
+.result{width:100%;animation:resultIn .5s var(--bounce)}
+@keyframes resultIn{from{opacity:0;transform:scale(.92) translateY(24px) rotate(-1.5deg)}to{opacity:1;transform:none}}
+.res-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;padding-bottom:16px;border-bottom:1px dashed var(--border)}
+.res-meta{font:600 10.5px var(--mono);color:var(--ink3);letter-spacing:.12em;text-transform:uppercase}
+.res-band{padding:6px 14px;border-radius:999px;font:700 10.5px var(--sans);letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:6px}
+.res-band::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.res-band.low{background:var(--green-p);color:var(--green);border:1px solid rgba(21,128,61,.25)}
+.res-band.mod{background:var(--amber-p);color:var(--amber);border:1px solid rgba(180,83,9,.25)}
+.res-band.high{background:var(--brick-p);color:var(--brick);border:1px solid rgba(161,40,36,.25)}
+.res-score{display:flex;align-items:baseline;gap:6px;margin-bottom:4px}
+.res-score .num{font:500 68px var(--mono);letter-spacing:-.04em;line-height:.95;color:var(--ink)}
+.res-score .of{font:500 22px var(--mono);color:var(--ink3)}
+.res-lbl{font:600 11px var(--sans);color:var(--ink2);margin-bottom:22px}
+.res-strip{position:relative;height:12px;border-radius:999px;display:flex;margin-bottom:8px;background:var(--border2)}
+.res-strip .seg{height:100%}
+.res-strip .seg:first-child{border-radius:999px 0 0 999px}
+.res-strip .seg:last-child{border-radius:0 999px 999px 0}
+.res-strip .g{background:#86c89e}.res-strip .a{background:#eac25c}.res-strip .r{background:#e5887a}
+.res-strip .m{position:absolute;top:-4px;bottom:-4px;width:3px;background:var(--ink);border-radius:3px;box-shadow:0 0 0 3px #fff;transition:left 1s var(--bounce)}
+.res-strip .m::before{content:"";position:absolute;top:-7px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:7px solid var(--ink)}
+.res-strip-lbl{display:flex;justify-content:space-between;font:600 10px var(--mono);color:var(--ink3);margin-bottom:20px}
+.res-factors-title{font:700 10.5px var(--mono);color:var(--ink3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+.res-factors{list-style:none;padding:0;margin:0 0 20px;font-size:13px}
+.res-factors li{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px dashed var(--border)}
+.res-factors li:last-child{border-bottom:0}
+.res-factors .name{color:var(--ink2)}
+.res-factors .val{font:600 12.5px var(--mono);padding:3px 10px;border-radius:8px}
+.res-factors .val.up{color:var(--brick);background:var(--brick-p)}
+.res-factors .val.dn{color:var(--green);background:var(--green-p)}
+.res-advice{padding:18px 20px;border-radius:14px;margin-top:18px}
+.res-advice.low{background:var(--green-p);border:1px solid rgba(21,128,61,.2)}
+.res-advice.mod{background:var(--amber-p);border:1px solid rgba(180,83,9,.2)}
+.res-advice.high{background:var(--brick-p);border:1px solid rgba(161,40,36,.2)}
+.res-advice h4{font:700 10.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
+.res-advice.low h4{color:var(--green)}
+.res-advice.mod h4{color:var(--amber)}
+.res-advice.high h4{color:var(--brick)}
+.res-advice p{font-size:13.5px;line-height:1.55;color:var(--ink);margin:0}
+.res-disc{margin-top:16px;padding-top:12px;border-top:1px solid var(--border);font:500 11px var(--sans);color:var(--ink3);line-height:1.6;text-align:center;font-style:italic}
+
+/* STEPS */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:760px){.steps{grid-template-columns:1fr}}
+.step{padding:26px;border-radius:24px;background:var(--glass);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border:1px solid var(--glass-border);box-shadow:0 2px 12px -6px rgba(20,32,51,.10);transition:transform .35s var(--bounce),box-shadow .35s var(--bounce)}
+.step:hover{transform:translateY(-4px) rotate(-.5deg);box-shadow:0 14px 28px -12px rgba(20,32,51,.15)}
+.step-num{font:600 11px var(--mono);color:var(--teal-d);letter-spacing:.12em;margin-bottom:14px}
+.step h3{font-size:16px;margin-bottom:6px;font-weight:600}
+.step p{font-size:13.5px;color:var(--ink2);margin:0;line-height:1.55}
+
+/* PREVENTION */
+.prevent{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:900px){.prevent{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.prevent{grid-template-columns:1fr}}
+.pcard{padding:24px;border-radius:24px;background:var(--glass);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border:1px solid var(--glass-border);box-shadow:0 2px 12px -6px rgba(20,32,51,.10);transition:transform .35s var(--bounce),box-shadow .35s var(--bounce)}
+.pcard:hover{transform:translateY(-4px) rotate(-.5deg);box-shadow:0 14px 28px -12px rgba(20,32,51,.15)}
+.pcard-n{font:600 11px var(--mono);color:var(--amber);letter-spacing:.14em;margin-bottom:12px}
+.pcard h4{font-family:var(--sans);font-size:14px;font-weight:700;margin-bottom:6px;letter-spacing:0}
+.pcard p{font-size:13px;color:var(--ink2);margin:0;line-height:1.55}
+
+/* MODEL TABLE */
+.mtable{border-radius:24px;overflow:hidden;margin-bottom:20px;background:var(--glass);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border:1px solid var(--glass-border);box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 4px 20px -8px rgba(20,32,51,.10)}
+.mrow{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1.7fr;border-bottom:1px solid var(--border2)}
+.mrow:last-child{border-bottom:0}
+.mrow.mhead{background:rgba(255,255,255,.35);border-bottom:1px solid var(--border)}
+.mrow.mhead .mc{font:700 10px var(--mono);color:var(--ink3);text-transform:uppercase;letter-spacing:.1em}
+.mc{padding:14px 16px;font-size:13.5px;border-right:1px solid var(--border2);display:flex;flex-direction:column;justify-content:center;line-height:1.4}
+.mc:last-child{border-right:0}
+.mc.name{font:600 14px var(--sans);color:var(--ink)}
+.mc.num{font:500 13px var(--mono);color:var(--ink)}
+.mc.num small{color:var(--ink3);font-weight:400;font-size:11px}
+.mc.note{font-size:12px;color:var(--ink2);line-height:1.5}
+@media(max-width:860px){.mrow{grid-template-columns:1fr 1fr}.mrow.mhead{display:none}.mc{padding:12px 14px;border-right:0;border-bottom:1px solid var(--border2)}.mc:nth-child(odd){border-right:1px solid var(--border2)}.mc:nth-child(n+5){grid-column:1/-1}}
+
+/* NOT THIS */
+.nots{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:720px){.nots{grid-template-columns:1fr}}
+.not{padding:20px 22px;border-radius:20px;border-left:3px solid var(--brick);background:var(--glass);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border:1px solid var(--glass-border);box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 4px 20px -8px rgba(20,32,51,.08)}
+.not h4{font-family:var(--sans);font-weight:700;color:var(--brick);margin-bottom:6px;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.not p{font-size:13px;color:var(--ink2);margin:0;line-height:1.6}
+
+/* FOOTER */
+.foot{padding:48px 0 68px;color:var(--ink3);font:500 12px var(--mono);line-height:1.8;letter-spacing:.02em}
+.foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:28px}
+@media(max-width:720px){.foot-grid{grid-template-columns:1fr;gap:16px}}
+.foot h5{font:600 10px var(--mono);color:var(--ink3);text-transform:uppercase;letter-spacing:.12em;margin:0 0 8px}
+.foot p{margin:0 0 4px;font-size:11px}
+.foot b{color:var(--ink2)}
+
+/* FAB */
+.fab{position:fixed;bottom:22px;right:22px;z-index:100;display:flex;align-items:center;gap:10px;padding:15px 22px 15px 18px;border-radius:999px;background:var(--brick);color:#fff;border:0;font:700 13px var(--sans);box-shadow:0 12px 28px -10px rgba(161,40,36,.6);transition:transform .3s var(--bounce),background .2s,box-shadow .2s;min-height:54px}
+.fab:hover{background:#7a1f1c;transform:translateY(-3px);box-shadow:0 16px 32px -10px rgba(161,40,36,.7)}
+.fab:active{transform:scale(.97);transition-duration:.1s}
+.fab svg{width:18px;height:18px}
+.fab .pulse{position:absolute;top:-3px;right:-3px;width:12px;height:12px;border-radius:50%;background:#fff}
+.fab .pulse::after{content:"";position:absolute;inset:-3px;border-radius:50%;background:#fff;opacity:.6;animation:fabPulse 2s infinite}
+@keyframes fabPulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(2);opacity:0}}
+@media(max-width:520px){.fab .txt{display:none}.fab{padding:15px;min-width:54px;justify-content:center}}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;z-index:200;background:rgba(20,32,51,.5);display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex;animation:overlayIn .2s ease}
+@keyframes overlayIn{from{opacity:0}to{opacity:1}}
+.modal{background:#fff;border-radius:22px;max-width:420px;width:100%;padding:30px;box-shadow:0 40px 80px -20px rgba(20,32,51,.5);position:relative;animation:modalIn .35s var(--bounce)}
+@keyframes modalIn{from{opacity:0;transform:scale(.92) translateY(20px) rotate(-1.5deg)}to{opacity:1;transform:none}}
+.modal h3{font-size:22px;margin-bottom:8px;padding-right:36px}
+.modal p{font-size:14px;color:var(--ink2);margin-bottom:20px;line-height:1.6}
+.modal-x{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:#eef2ec;border:0;display:grid;place-items:center;color:var(--ink2);font-size:16px;transition:background .2s,color .2s}
+.modal-x:hover{background:#dde5dd;color:var(--ink)}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.modal-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:18px;border-radius:16px;text-decoration:none;color:#fff;transition:transform .2s var(--bounce),box-shadow .2s}
+.modal-btn.nat{background:var(--brick)}
+.modal-btn.amb{background:#c2410c}
+.modal-btn:hover{transform:translateY(-2px);box-shadow:0 10px 20px -8px rgba(0,0,0,.3)}
+.modal-btn small{font:700 9.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;opacity:.9}
+.modal-btn b{font:700 26px var(--mono);line-height:1}
+.modal-cancel{width:100%;padding:14px;border-radius:12px;background:#eef2ec;border:1px solid var(--border);color:var(--ink2);font:600 13px var(--sans);transition:background .2s,color .2s;min-height:48px}
+.modal-cancel:hover{background:#dde5dd;color:var(--ink)}
+
+/* REVEAL */
+.reveal{opacity:0}
+.reveal.vis{animation:revealPop .8s var(--bounce) forwards}
+@keyframes revealPop{from{opacity:0;transform:translateY(32px) rotate(-1.8deg)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}.reveal{opacity:1}.reveal.vis{animation:none}}
+
+/* § 05 — model transparency */
+.explainer{background:var(--glass);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border:1px solid var(--glass-border);border-radius:20px;padding:22px 26px;margin-bottom:20px;box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 4px 20px -8px rgba(20,32,51,.10)}
+.explainer h3{font-size:15px;font-weight:600;margin-bottom:10px;color:var(--ink)}
+.explainer p{font-size:13px;line-height:1.65;color:var(--ink2);margin:0 0 10px}
+.explainer p:last-child{margin-bottom:0}
+.explainer ul{margin:0 0 12px;padding-left:20px;font-size:13px;line-height:1.65;color:var(--ink2)}
+.explainer ul:last-child{margin-bottom:0}
+.explainer b{color:var(--ink);font-weight:600}
+
+.model-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media(max-width:760px){.model-cards{grid-template-columns:1fr}}
+
+.mcard{background:var(--glass);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border:1px solid var(--glass-border);border-radius:20px;padding:22px;box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 4px 20px -8px rgba(20,32,51,.10);transition:transform .35s var(--bounce),box-shadow .35s var(--bounce)}
+.mcard:hover{transform:translateY(-3px);box-shadow:0 14px 28px -12px rgba(20,32,51,.15)}
+.mcard-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;gap:10px;flex-wrap:wrap}
+.mcard-head h3{font-size:17px;font-weight:600;margin:0}
+.mcard-head .auc-badge{font:600 13px var(--mono);padding:5px 10px;border-radius:999px;background:var(--teal-p);color:var(--teal-d);border:1px solid rgba(31,107,106,.25);white-space:nowrap}
+.mcard-sub{font:600 10px var(--mono);color:var(--ink3);letter-spacing:.06em;margin-bottom:14px;line-height:1.4}
+.mcard-section{margin-bottom:12px;padding-bottom:12px;border-bottom:1px dashed var(--border)}
+.mcard-section:last-of-type{margin-bottom:8px}
+.mcard-section-title{font:700 9.5px var(--mono);color:var(--ink3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;line-height:1.4}
+.mcard-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mcard-metric{text-align:center}
+.mcard-metric .v{font:600 15px var(--mono);color:var(--ink);line-height:1}
+.mcard-metric .l{font:600 9px var(--sans);color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-top:4px}
+.mcard-info{display:flex;gap:14px;flex-wrap:wrap;font:500 11px var(--mono);color:var(--ink3);margin:10px 0 4px}
+.mcard-info b{color:var(--ink2);font-weight:600}
+.mcard-limit{font-size:11.5px;color:var(--ink2);padding:9px 11px;background:var(--brick-p);border-left:2px solid var(--brick);border-radius:6px;line-height:1.55;margin-top:10px}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <div class="brand"><span class="brand-dot"></span><span data-i18n="brand">Parakh</span><span class="brand-alt" data-i18n="brandAlt">परख</span></div>
+    <div class="nav-right">
+      <button class="btn-lang" id="langBtn">हिंदी</button>
+      <button class="btn-em-nav" onclick="openEm()">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <span data-i18n="emBtn">Emergency</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="badge"><span class="badge-live"></span><span data-i18n="heroBadge">36,809 training rows · 4 models · 0 uploaded</span></div>
+        <h1 data-i18n-html="heroH1">Know the risk <em>before</em> it becomes the diagnosis.</h1>
+        <p class="lead" data-i18n="heroSub">A bilingual screener for four lifestyle-driven conditions. Runs entirely in your browser — nothing sent, nothing stored. Built for rural India and community health workers.</p>
+        <div class="cta-row">
+          <button class="btn-primary" onclick="document.getElementById('checker').scrollIntoView({behavior:'smooth'})"><span data-i18n="heroCta">Run a screening</span> →</button>
+          <button class="btn-ghost" onclick="document.getElementById('conditions').scrollIntoView({behavior:'smooth'})" data-i18n="heroCta2">See conditions</button>
+        </div>
+      </div>
+      <div class="preview">
+        <div class="preview-hd">
+          <span class="preview-lbl" data-i18n="previewReport">Report · Sample</span>
+          <span class="preview-band" data-i18n="previewBand">Moderate risk</span>
+        </div>
+        <div class="preview-score"><span class="n">54</span><span class="of">/100</span></div>
+        <div class="preview-desc" data-i18n="previewDesc">Diabetes · risk score</div>
+        <div class="preview-bar"><span class="g"></span><span class="a"></span><span class="r"></span></div>
+        <ul class="preview-rows">
+          <li><span data-i18n="fAge">Age</span><b>+6.0</b></li>
+          <li><span>BMI</span><b>+9.0</b></li>
+          <li><span data-i18n="fFamily">Family history</span><b>+8.0</b></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap stats">
+    <div class="stats-grid">
+      <div class="stat"><div class="stat-n">36,809<small>rows</small></div><div class="stat-l" data-i18n="stat1">Model-training rows</div></div>
+      <div class="stat"><div class="stat-n">4</div><div class="stat-l" data-i18n="stat2">ML models</div></div>
+      <div class="stat"><div class="stat-n">0.84<small>–0.94</small></div><div class="stat-l" data-i18n="stat3">AUC range</div></div>
+      <div class="stat"><div class="stat-n">0<small>KB</small></div><div class="stat-l" data-i18n="stat4">Uploaded to server</div></div>
+    </div>
+  </section>
+
+  <section class="section wrap" id="conditions">
+    <div class="sec-head reveal">
+      <div class="sec-num">§ 01</div>
+      <div>
+        <h2 class="sec-title" data-i18n-html="condTitle">Four conditions, <em>one screening</em></h2>
+        <p class="sec-sub" data-i18n="condSub">Each condition develops silently over years. Catching the pattern early is what makes it changeable.</p>
+      </div>
+    </div>
+    <div class="conds reveal">
+      <div class="cond" style="--c:#1f6b6a;--c-bg:rgba(31,107,106,.14)">
+        <div class="cond-top">
+          <div class="cond-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-3 4-6 7-6 11a6 6 0 0 0 12 0c0-4-3-7-6-11z"/><path d="M9 15a3 3 0 0 0 3 3" opacity=".5"/></svg></div>
+          <div class="cond-auc"><div class="cond-auc-v">0.939</div><div class="cond-auc-l" style="line-height:1.2">AUC<br><span style="font-size:8.5px;opacity:0.65;font-weight:400">(Area Under Curve)</span></div></div>
+        </div>
+        <h3 data-i18n="condDiName">Diabetes</h3>
+        <div class="cond-en">TYPE 2 · NHANES</div>
+        <p data-i18n="condDiDesc">Gradual loss of blood-sugar regulation. Driven by weight, activity, and family history.</p>
+        <div class="cond-meta"><b>11,260</b> <span data-i18n="metaSamp">samples</span> · <b>8</b> <span data-i18n="metaFeat">features</span> · <b>0.94</b> CV</div>
+        <div class="cond-cav" data-i18n="condDiCav">Limitation: glucose and HbA1c are in both label and features — reading the lab, not pure prediction.</div>
+      </div>
+      <div class="cond" style="--c:#a12824;--c-bg:rgba(161,40,36,.14)">
+        <div class="cond-top">
+          <div class="cond-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 15c0 4-3 6-8 6s-8-2-8-6 3-6 8-6 8 2 8 6z"/><path d="M12 3v6M9 6l3-3 3 3"/></svg></div>
+          <div class="cond-auc"><div class="cond-auc-v">0.868</div><div class="cond-auc-l" style="line-height:1.2">AUC<br><span style="font-size:8.5px;opacity:0.65;font-weight:400">(Area Under Curve)</span></div></div>
+        </div>
+        <h3 data-i18n="condHeName">Heart disease</h3>
+        <div class="cond-en">CORONARY · NHANES</div>
+        <p data-i18n="condHeDesc">Coronary artery disease and heart attack risk. Driven by BP, cholesterol, smoking.</p>
+        <div class="cond-meta"><b>11,287</b> <span data-i18n="metaSamp">samples</span> · <b>15</b> <span data-i18n="metaFeat">features</span> · <b>0.87</b> CV</div>
+        <div class="cond-cav" data-i18n="condHeCav">Limitation: label is self-reported — high-band precision is ~30% because of that.</div>
+      </div>
+      <div class="cond" style="--c:#5a4a8a;--c-bg:rgba(90,74,138,.14)">
+        <div class="cond-top">
+          <div class="cond-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3C7 3 4 7 4 12s3 9 8 9 8-4 8-9-3-9-8-9z"/><path d="M8 14h8M12 10v8"/></svg></div>
+          <div class="cond-auc"><div class="cond-auc-v">0.937</div><div class="cond-auc-l" style="line-height:1.2">AUC<br><span style="font-size:8.5px;opacity:0.65;font-weight:400">(Area Under Curve)</span></div></div>
+        </div>
+        <h3 data-i18n="condKiName">Kidney disease</h3>
+        <div class="cond-en">CKD · NHANES</div>
+        <p data-i18n="condKiDesc">Slow decline in kidney function. Driven by long-term diabetes, high BP, painkillers.</p>
+        <div class="cond-meta"><b>10,064</b> <span data-i18n="metaSamp">samples</span> · <b>14</b> <span data-i18n="metaFeat">features</span> · <b>0.94</b> CV</div>
+        <div class="cond-cav" data-i18n="condKiCav">Limitation: label is eGFR under 60; creatinine excluded to avoid a label leak.</div>
+      </div>
+      <div class="cond" style="--c:#b45309;--c-bg:rgba(180,83,9,.14)">
+        <div class="cond-top">
+          <div class="cond-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v4M6 3v4M9 7H6v3a3 3 0 006 0V7z"/><path d="M12 10c0 4 2 6 5 6s4-2 4-4V8h-4"/></svg></div>
+          <div class="cond-auc"><div class="cond-auc-v">0.843</div><div class="cond-auc-l" style="line-height:1.2">AUC<br><span style="font-size:8.5px;opacity:0.65;font-weight:400">(Area Under Curve)</span></div></div>
+        </div>
+        <h3 data-i18n="condLiName">Fatty liver</h3>
+        <div class="cond-en">PROXY · NHANES</div>
+        <p data-i18n="condLiDesc">Fat accumulation in the liver. Linked to weight, insulin resistance, diet.</p>
+        <div class="cond-meta"><b>4,198</b> <span data-i18n="metaSamp">samples</span> · <b>12</b> <span data-i18n="metaFeat">features</span> · <b>0.82</b> CV</div>
+        <div class="cond-cav" data-i18n="condLiCav">Limitation: label is FLI (proxy score), not ultrasound. GGT is partly circular.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="checker-sec" id="checker">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="sec-num">§ 02</div>
+        <div>
+          <h2 class="sec-title" data-i18n-html="checkerTitle">Run a screening <em>now</em></h2>
+          <p class="sec-sub" data-i18n="checkerSub">Pick a condition, fill in the fields, get an instant risk reading. Everything runs locally — nothing leaves your device.</p>
+        </div>
+      </div>
+
+      <div class="a11y-bar reveal">
+        <div class="a11y-group">
+          <label data-i18n="a11yUnits">Units</label>
+          <button data-u="metric" class="active">cm · kg</button>
+          <button data-u="imperial">ft·in · lbs</button>
+        </div>
+        <div class="a11y-group">
+          <label data-i18n="a11yText">Text</label>
+          <button data-ts="normal" class="active">A</button>
+          <button data-ts="large">A+</button>
+          <button data-ts="xlarge">A++</button>
+        </div>
+        <div class="a11y-group">
+          <label data-i18n="a11yContrast">Contrast</label>
+          <button data-c="normal" class="active" data-i18n="a11yNormal">Normal</button>
+          <button data-c="high" data-i18n="a11yHigh">High</button>
+        </div>
+      </div>
+
+      <div class="checker-card reveal">
+        <div class="tabs" id="tabs">
+          <button data-c="diabetes" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c-3 4-6 7-6 11a6 6 0 0 0 12 0c0-4-3-7-6-11z"/></svg><span data-i18n="tabDi">Diabetes</span></button>
+          <button data-c="heart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 15c0 4-3 6-8 6s-8-2-8-6 3-6 8-6 8 2 8 6z"/><path d="M12 3v6"/></svg><span data-i18n="tabHe">Heart</span></button>
+          <button data-c="kidney"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 14h8M12 10v8"/></svg><span data-i18n="tabKi">Kidney</span></button>
+          <button data-c="fattyliver"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3v4M6 3v4M9 7H6v3a3 3 0 006 0V7z"/><path d="M12 10c0 4 2 6 5 6s4-2 4-4V8h-4"/></svg><span data-i18n="tabLi">Liver</span></button>
+        </div>
+        <div class="mode-row">
+          <div class="mode-pill" id="modes">
+            <button data-m="quick" class="active"><span data-i18n="modeQuick">⚡ Quick</span></button>
+            <button data-m="clinical"><span data-i18n="modeClin">🔬 Clinical</span></button>
+          </div>
+          <div class="mode-note" id="modeNote"></div>
+        </div>
+        <div class="checker-body">
+          <form class="form-col" id="formCol" onsubmit="return false"></form>
+          <div class="result-col" id="resultCol" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">§ 03</div>
+      <div><h2 class="sec-title" data-i18n="howTitle">How it works</h2></div>
+    </div>
+    <div class="steps reveal">
+      <div class="step"><div class="step-num">01 / MODE</div><h3 data-i18n="how1t">Pick a mode</h3><p data-i18n="how1d">Quick uses everyday factors — no lab tests needed. Clinical uses recent lab values if you have them.</p></div>
+      <div class="step"><div class="step-num">02 / ANSWERS</div><h3 data-i18n="how2t">Answer 6 to 15 questions</h3><p data-i18n="how2d">About two minutes. Everything runs on the device — nothing is sent to any server.</p></div>
+      <div class="step"><div class="step-num">03 / REPORT</div><h3 data-i18n="how3t">Get a factor-by-factor reading</h3><p data-i18n="how3d">Risk band (low, moderate, high), which factors drove it, and what to do next.</p></div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">§ 04</div>
+      <div>
+        <h2 class="sec-title" data-i18n-html="prevTitle">The habits that <em>move the needle</em></h2>
+        <p class="sec-sub" data-i18n="prevSub">The same handful of changes lower risk across every condition above.</p>
+      </div>
+    </div>
+    <div class="prevent reveal">
+      <div class="pcard"><div class="pcard-n">01</div><h4 data-i18n="prev1t">Move most days</h4><p data-i18n="prev1d">150 minutes a week of brisk activity measurably lowers risk across all four conditions.</p></div>
+      <div class="pcard"><div class="pcard-n">02</div><h4 data-i18n="prev2t">Rebuild the plate</h4><p data-i18n="prev2d">More whole food, less refined sugar and sodium — the biggest lever for blood sugar and blood pressure.</p></div>
+      <div class="pcard"><div class="pcard-n">03</div><h4 data-i18n="prev3t">Protect sleep</h4><p data-i18n="prev3d">Short or irregular sleep disrupts appetite hormones and blood pressure regulation alike.</p></div>
+      <div class="pcard"><div class="pcard-n">04</div><h4 data-i18n="prev4t">Screen early</h4><p data-i18n="prev4d">Routine BP, glucose, and cholesterol checks catch these conditions years before symptoms do.</p></div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">§ 05</div>
+      <div>
+        <h2 class="sec-title" data-i18n="modelTitle">Inside the models</h2>
+        <p class="sec-sub" data-i18n="modelSub">Trained on NHANES, cross-validated across two survey cycles. All numbers shown as-is.</p>
+      </div>
+    </div>
+    <div class="explainer reveal">
+      <h3>How to read these numbers</h3>
+      <p><b>AUC stands for "Area Under the ROC Curve."</b> It's a single 0.5–1.0 score that measures how well the model ranks sick people above healthy people across every possible cutoff. 0.5 = coin flip, 1.0 = perfect ranking. AUC is threshold-free, which is why it's used as the headline metric.</p>
+      <p><b>Accuracy, Precision, Recall and F1 all depend on the threshold</b> you use to call someone "flagged." This app uses two thresholds per model, shown below as bands:</p>
+      <ul>
+        <li><b>Moderate band</b> — the screening trigger. Threshold is tuned to catch ~90% of true cases. High recall, at the cost of more false alarms.</li>
+        <li><b>High band</b> — the referral trigger. Threshold is tuned to catch ~60% of true cases. Higher precision, so a "high" reading is more likely to be a real case.</li>
+      </ul>
+      <p><b>Plain-English definitions:</b></p>
+      <ul>
+        <li><b>Accuracy</b> — of 100 predictions, how many were right (positive or negative)</li>
+        <li><b>Precision</b> — of everyone flagged, what percentage actually had the condition</li>
+        <li><b>Recall</b> — of everyone who had the condition, what percentage did the model flag</li>
+        <li><b>F1</b> — the harmonic mean of precision and recall (one number balancing both)</li>
+      </ul>
+      <p>For a screening tool, <b>recall matters more than accuracy</b>: missing a sick person is worse than flagging a healthy one for a follow-up. That's why accuracy at the moderate band looks lower than at the high band — the model is doing its job of casting a wide net on the first pass.</p>
+    </div>
+
+    <div class="model-cards reveal" id="modelCards"></div>
+  </section>
+
+  <section class="section wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">§ 06</div>
+      <div><h2 class="sec-title" data-i18n-html="notTitle">What this is <em>not</em></h2></div>
+    </div>
+    <div class="nots reveal">
+      <div class="not"><h4 data-i18n="not1t">Not a diagnosis</h4><p data-i18n="not1d">It flags a pattern; it does not confirm disease. Every high result should be followed by a proper clinical workup.</p></div>
+      <div class="not"><h4 data-i18n="not2t">Not a substitute for blood tests</h4><p data-i18n="not2d">Quick mode is a heuristic. Clinical mode uses lab values you enter — a real lab report is always more reliable.</p></div>
+      <div class="not"><h4 data-i18n="not3t">Not validated for everyone</h4><p data-i18n="not3d">Training data is US-based adults. Not validated for children, pregnancy, or people with existing chronic conditions.</p></div>
+      <div class="not"><h4 data-i18n="not4t">Not a medical device</h4><p data-i18n="not4d">No FDA or CDSCO clearance. It is a screening aid — think of it like a smoke alarm, not a fire extinguisher.</p></div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap foot">
+  <div class="foot-grid">
+    <div>
+      <h5 data-i18n="footAbout">About</h5>
+      <p><b>Parakh</b> · <span data-i18n="footAboutText">open-source screening aid for four lifestyle-driven conditions, built for rural India and community health workers.</span></p>
+      <p>MIT license</p>
+    </div>
+    <div>
+      <h5 data-i18n="footTech">Technical</h5>
+      <p>NHANES 2015–16 / 2017–18</p>
+      <p>scikit-learn · 4 models</p>
+      <p>Platt calibrated</p>
+    </div>
+    <div>
+      <h5 data-i18n="footNot">Not</h5>
+      <p data-i18n-html="footNotText">Not a medical device.<br>Not FDA approved.<br>Not a diagnostic tool.</p>
+    </div>
+  </div>
+</footer>
+
+<button class="fab" onclick="openEm()" aria-label="Emergency">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+  <span class="txt" data-i18n="emBtn">Emergency</span>
+  <span class="pulse"></span>
+</button>
+
+<div class="overlay" id="emOverlay">
+  <div class="modal">
+    <button class="modal-x" onclick="closeEm()">✕</button>
+    <h3 data-i18n="emTitle">Emergency services</h3>
+    <p data-i18n="emBody">If this is a real emergency, call from below. Otherwise cancel.</p>
+    <div class="modal-grid">
+      <a href="tel:112" class="modal-btn nat"><small data-i18n="emNat">National</small><b>112</b></a>
+      <a href="tel:108" class="modal-btn amb"><small data-i18n="emAmb">Ambulance</small><b>108</b></a>
+    </div>
+    <button class="modal-cancel" onclick="closeEm()" data-i18n="emCancel">Cancel</button>
+  </div>
+</div>
+
+<script src="models.js"></script>
+<script>
+const I18N = {
+  en: {
+    brand:"Parakh",brandAlt:"परख",langBtn:"हिंदी",
+    heroBadge:"36,809 training rows · 4 models · 0 uploaded",
+    heroH1:"Know the risk <em>before</em> it becomes the diagnosis.",
+    heroSub:"A bilingual screener for four lifestyle-driven conditions. Runs entirely in your browser — nothing sent, nothing stored. Built for rural India and community health workers.",
+    heroCta:"Run a screening",heroCta2:"See conditions",
+    previewReport:"Report · Sample",previewBand:"Moderate risk",previewDesc:"Diabetes · risk score",
+    fAge:"Age",fFamily:"Family history",
+    stat1:"Model-training rows",stat2:"ML models",stat3:"AUC range",stat4:"Uploaded to server",
+    a11yUnits:"Units",a11yText:"Text",a11yContrast:"Contrast",a11yNormal:"Normal",a11yHigh:"High",
+    condTitle:"Four conditions, <em>one screening</em>",
+    condSub:"Each condition develops silently over years. Catching the pattern early is what makes it changeable.",
+    condDiName:"Diabetes",condDiDesc:"Gradual loss of blood-sugar regulation. Driven by weight, activity, and family history.",condDiCav:"Limitation: glucose and HbA1c are in both label and features — reading the lab, not pure prediction.",
+    condHeName:"Heart disease",condHeDesc:"Coronary artery disease and heart attack risk. Driven by BP, cholesterol, smoking.",condHeCav:"Limitation: label is self-reported — high-band precision is ~30% because of that.",
+    condKiName:"Kidney disease",condKiDesc:"Slow decline in kidney function. Driven by long-term diabetes, high BP, painkillers.",condKiCav:"Limitation: label is eGFR under 60; creatinine excluded to avoid a label leak.",
+    condLiName:"Fatty liver",condLiDesc:"Fat accumulation in the liver. Linked to weight, insulin resistance, diet.",condLiCav:"Limitation: label is FLI (proxy score), not ultrasound. GGT is partly circular.",
+    metaSamp:"samples",metaFeat:"features",
+    checkerTitle:"Run a screening <em>now</em>",
+    checkerSub:"Pick a condition, fill in the fields, get an instant risk reading. Everything runs locally — nothing leaves your device.",
+    tabDi:"Diabetes",tabHe:"Heart",tabKi:"Kidney",tabLi:"Liver",
+    modeQuick:"⚡ Quick",modeClin:"🔬 Clinical",
+    modeQuickNote:"No labs — everyday factors only.",modeClinNote:"Enter recent lab values. Blanks fall back to training median.",
+    calcBtn:"Calculate risk",emptyMsg:"Fill in the form and press Calculate.",
+    resultReport:"Report · Result",resultScore:"Risk score",resultFactors:"Top factors",
+    bandLow:"Low risk",bandMod:"Moderate risk",bandHigh:"High risk",
+    advLowT:"Keep it up",advLowB:"Your pattern is favourable. Keep the habits that got you here — a routine yearly check keeps you safe.",
+    advModT:"Worth a routine check",advModB:"A checkup in the next few months would be sensible. Nothing urgent — just confirm with real numbers.",
+    advHighT:"See a doctor soon",advHighB:"Please see a doctor for proper testing soon. This tool flags a pattern; it cannot confirm a diagnosis.",
+    disc:"Screening aid — not a diagnosis. Confirm with a qualified healthcare provider.",
+    howTitle:"How it works",
+    how1t:"Pick a mode",how1d:"Quick uses everyday factors — no lab tests needed. Clinical uses recent lab values if you have them.",
+    how2t:"Answer 6 to 15 questions",how2d:"About two minutes. Everything runs on the device — nothing is sent to any server.",
+    how3t:"Get a factor-by-factor reading",how3d:"Risk band (low, moderate, high), which factors drove it, and what to do next.",
+    prevTitle:"The habits that <em>move the needle</em>",
+    prevSub:"The same handful of changes lower risk across every condition above.",
+    prev1t:"Move most days",prev1d:"150 minutes a week of brisk activity measurably lowers risk across all four conditions.",
+    prev2t:"Rebuild the plate",prev2d:"More whole food, less refined sugar and sodium — the biggest lever for blood sugar and blood pressure.",
+    prev3t:"Protect sleep",prev3d:"Short or irregular sleep disrupts appetite hormones and blood pressure regulation alike.",
+    prev4t:"Screen early",prev4d:"Routine BP, glucose, and cholesterol checks catch these conditions years before symptoms do.",
+    modelTitle:"Inside the models",
+    modelSub:"Trained on NHANES, cross-validated across two survey cycles. All numbers shown as-is.",
+    notTitle:"What this is <em>not</em>",
+    not1t:"Not a diagnosis",not1d:"It flags a pattern; it does not confirm disease. Every high result should be followed by a proper clinical workup.",
+    not2t:"Not a substitute for blood tests",not2d:"Quick mode is a heuristic. Clinical mode uses lab values you enter — a real lab report is always more reliable.",
+    not3t:"Not validated for everyone",not3d:"Training data is US-based adults. Not validated for children, pregnancy, or people with existing chronic conditions.",
+    not4t:"Not a medical device",not4d:"No FDA or CDSCO clearance. It is a screening aid — think of it like a smoke alarm, not a fire extinguisher.",
+    footAbout:"About",footAboutText:"open-source screening aid for four lifestyle-driven conditions, built for rural India and community health workers.",
+    footTech:"Technical",footNot:"Not",footNotText:"Not a medical device.<br>Not FDA approved.<br>Not a diagnostic tool.",
+    emBtn:"Emergency",emTitle:"Emergency services",emBody:"If this is a real emergency, call from below. Otherwise cancel.",emNat:"National",emAmb:"Ambulance",emCancel:"Cancel",
+    fHeight:"Height",fWeight:"Weight",fWaist:"Waist",ftUnit:"ft",inUnit:"in",lbUnit:"lbs",inWaist:"in",
+    fields:{age:"Age",sex:"Sex",height_cm:"Height (cm)",weight_kg:"Weight (kg)",waist_cm:"Waist (cm)",sbp:"Systolic BP",dbp:"Diastolic BP",glucose:"Fasting glucose (mg/dL)",hba1c:"HbA1c (%)",chol:"Total cholesterol (mg/dL)",hdl:"HDL (mg/dL)",trig:"Triglycerides (mg/dL)",crp:"hs-CRP (mg/L)",activity_days:"Active days/week",alt:"ALT (IU/L)",ast:"AST (IU/L)",alp:"ALP (IU/L)",ggt:"GGT (IU/L)",bili:"Bilirubin (mg/dL)",albumin:"Albumin (g/dL)",bun:"BUN (mg/dL)",acr:"Urine ACR (mg/g)",uric_acid:"Uric acid (mg/dL)",potassium:"Potassium (mmol/L)",calcium:"Calcium (mg/dL)",phosphorus:"Phosphorus (mg/dL)",chloride:"Chloride (mmol/L)"},
+    select:{sex:{label:"Sex",options:[["1","Male"],["2","Female"]]},smoker:{label:"Currently smoke?",options:[["0","No"],["1","Yes"]]},diabetes:{label:"Diabetes?",options:[["0","No"],["1","Yes"]]},bp_diag:{label:"Diagnosed high BP?",options:[["0","No"],["1","Yes"]]},family_hx:{label:"Family history of heart attack?",options:[["0","No"],["1","Yes"]]},htn:{label:"Hypertension?",options:[["0","No"],["1","Yes"]]},activity:{label:"Physical activity",options:[["0","Regular (150+ min/wk)"],["6","Some activity"],["12","Little/none"]]},family_diabetes:{label:"Family history of diabetes",options:[["0","None"],["8","One parent/sib"],["16","Multiple"]]},family_heart:{label:"Family history of heart disease",options:[["0","None"],["8","One relative"],["16","Multiple"]]},family_kidney:{label:"Family history of kidney disease",options:[["0","None"],["8","One relative"],["14","Multiple"]]},smoking:{label:"Smoking",options:[["0","Never"],["6","Former"],["16","Current"]]},bp_known:{label:"Known BP range",options:[["0","Normal"],["6","Elevated"],["12","Stage 1"],["18","Stage 2"]]},chol_known:{label:"Known cholesterol",options:[["0","Desirable"],["8","Borderline"],["14","High"]]},diabetes_status:{label:"Diabetes status",options:[["0","No"],["10","Pre-diabetes"],["20","Yes"]]},diet:{label:"Typical diet",options:[["0","Whole foods"],["5","Mixed"],["10","Processed/sugary"]]},alcohol:{label:"Alcohol intake",options:[["0","None/low"],["6","Moderate"],["14","High"]]},painkillers:{label:"Painkiller use (NSAID)",options:[["0","Rarely"],["8","Sometimes"],["16","Often"]]}},
+    quick:{diabetes:["age","sex","height_cm","weight_kg","waist_cm","activity","family_diabetes","bp_diag","diet"],heart:["age","sex","height_cm","weight_kg","smoking","bp_known","chol_known","diabetes_status","activity","family_heart"],kidney:["age","diabetes_status","bp_diag","smoking","height_cm","weight_kg","painkillers","family_kidney"],fattyliver:["age","sex","height_cm","weight_kg","waist_cm","diabetes_status","diet","alcohol","activity"]},
+    clinical:{diabetes:["age","sex","height_cm","weight_kg","waist_cm","sbp","dbp","glucose","hba1c"],heart:["age","sex","height_cm","weight_kg","sbp","dbp","chol","hdl","trig","hba1c","crp","smoker","diabetes","activity_days","bp_diag","family_hx"],kidney:["age","sex","bun","acr","sbp","uric_acid","albumin","potassium","calcium","phosphorus","chloride","hba1c","diabetes","htn"],fattyliver:["age","sex","trig","hdl","alt","ast","alp","ggt","bili","albumin","glucose","diabetes"]}
+  },
+  hi: {
+    brand:"परख",brandAlt:"Parakh",langBtn:"English",
+    heroBadge:"36,809 प्रशिक्षण पंक्तियाँ · 4 मॉडल · 0 अपलोड",
+    heroH1:"जोखिम <em>पहले</em> जानें, फिर चिंता करें।",
+    heroSub:"चार जीवनशैली-जनित रोगों के लिए द्विभाषी स्क्रीनर। पूरा आपके ब्राउज़र में — कुछ नहीं भेजा, कुछ नहीं सहेजा। ग्रामीण भारत और सामुदायिक स्वास्थ्य कार्यकर्ताओं के लिए बना।",
+    heroCta:"जांच शुरू करें",heroCta2:"स्थितियाँ देखें",
+    previewReport:"रिपोर्ट · नमूना",previewBand:"मध्यम जोखिम",previewDesc:"डायबिटीज़ · जोखिम स्कोर",
+    fAge:"उम्र",fFamily:"पारिवारिक इतिहास",
+    stat1:"प्रशिक्षण पंक्तियाँ",stat2:"ML मॉडल",stat3:"AUC रेंज",stat4:"सर्वर पर अपलोड",
+    a11yUnits:"इकाई",a11yText:"अक्षर",a11yContrast:"कंट्रास्ट",a11yNormal:"सामान्य",a11yHigh:"उच्च",
+    condTitle:"चार स्थितियाँ · <em>एक परख</em>",
+    condSub:"हर स्थिति वर्षों में चुपचाप विकसित होती है। शुरुआत में पैटर्न पकड़ना ही इसे बदलने योग्य बनाता है।",
+    condDiName:"डायबिटीज़",condDiDesc:"रक्त शर्करा नियंत्रण की धीरे-धीरे कम होती क्षमता। वज़न, गतिविधि, पारिवारिक इतिहास से जुड़ी।",condDiCav:"सीमा: ग्लूकोज़ व HbA1c लेबल और फ़ीचर दोनों में — रिपोर्ट पढ़ने जैसा।",
+    condHeName:"हृदय रोग",condHeDesc:"कोरोनरी धमनी रोग और हार्ट अटैक जोखिम। BP, कोलेस्ट्रॉल, धूम्रपान से जुड़ा।",condHeCav:"सीमा: लेबल स्व-रिपोर्ट है — उच्च बैंड precision ~30%।",
+    condKiName:"किडनी रोग",condKiDesc:"किडनी की धीमी गिरावट। डायबिटीज़, उच्च BP, दर्दनिवारक दवाओं से जुड़ी।",condKiCav:"सीमा: लेबल eGFR 60 से कम; क्रिएटिनिन बाहर रखा।",
+    condLiName:"फैटी लिवर",condLiDesc:"लिवर में चर्बी जमा होना। वज़न, इंसुलिन प्रतिरोध, आहार से जुड़ा।",condLiCav:"सीमा: लेबल FLI (प्रॉक्सी) है, अल्ट्रासाउंड नहीं।",
+    metaSamp:"नमूने",metaFeat:"फ़ीचर",
+    checkerTitle:"अब <em>जांचें</em>",
+    checkerSub:"स्थिति चुनें, फ़ॉर्म भरें, तुरंत जोखिम रीडिंग पाएं। सब कुछ स्थानीय — कुछ बाहर नहीं जाता।",
+    tabDi:"डायबिटीज़",tabHe:"हृदय",tabKi:"किडनी",tabLi:"लिवर",
+    modeQuick:"⚡ क्विक",modeClin:"🔬 क्लिनिकल",
+    modeQuickNote:"कोई लैब नहीं — रोज़मर्रा के कारक।",modeClinNote:"हाल के लैब मान भरें। खाली फ़ील्ड ट्रेनिंग मीडियन से भरेंगे।",
+    calcBtn:"जोखिम जानें",emptyMsg:"फ़ॉर्म भरें और जोखिम जानें दबाएं।",
+    resultReport:"रिपोर्ट · परिणाम",resultScore:"जोखिम स्कोर",resultFactors:"मुख्य कारक",
+    bandLow:"कम जोखिम",bandMod:"मध्यम जोखिम",bandHigh:"उच्च जोखिम",
+    advLowT:"ऐसे ही चलते रहें",advLowB:"आपका पैटर्न अनुकूल है। जो आदतें यहाँ तक लाई हैं, उन्हें जारी रखें।",
+    advModT:"रूटीन जांच कराएं",advModB:"अगले कुछ महीनों में जांच कराना समझदारी होगी। कुछ तत्काल नहीं।",
+    advHighT:"जल्द डॉक्टर से मिलें",advHighB:"जल्द ही डॉक्टर से मिलें। यह टूल एक पैटर्न बताता है; निदान साबित नहीं कर सकता।",
+    disc:"स्क्रीनिंग सहायक — निदान नहीं। योग्य स्वास्थ्य विशेषज्ञ से पुष्टि करें।",
+    howTitle:"कैसे काम करता है",
+    how1t:"मोड चुनें",how1d:"क्विक — रोज़मर्रा के सवाल, कोई लैब नहीं। क्लिनिकल — अगर रिपोर्ट हाथ में है।",
+    how2t:"6 से 15 सवाल",how2d:"लगभग दो मिनट। सब कुछ डिवाइस पर — कुछ सर्वर पर नहीं भेजा जाता।",
+    how3t:"कारक-दर-कारक रीडिंग",how3d:"जोखिम बैंड (कम, मध्यम, उच्च), किन कारकों ने बनाया, और आगे क्या करें।",
+    prevTitle:"वे आदतें जो <em>सबसे ज़्यादा असर डालती हैं</em>",
+    prevSub:"यही कुछ बदलाव हर स्थिति में जोखिम घटाते हैं।",
+    prev1t:"ज़्यादातर दिन चलें-फिरें",prev1d:"हफ़्ते में 150 मिनट तेज़ गतिविधि चारों स्थितियों के जोखिम को मापने योग्य रूप से घटाती है।",
+    prev2t:"थाली फिर से बनाएं",prev2d:"ज़्यादा साबुत भोजन, कम रिफाइंड शुगर और सोडियम — ब्लड शुगर और BP के लिए सबसे बड़ा बदलाव।",
+    prev3t:"नींद सुरक्षित रखें",prev3d:"कम या अनियमित नींद भूख के हार्मोन और BP नियंत्रण दोनों को बिगाड़ती है।",
+    prev4t:"जल्दी जांच करवाएं",prev4d:"नियमित BP, ग्लूकोज़ और कोलेस्ट्रॉल जांच लक्षण दिखने से वर्षों पहले पकड़ लेती है।",
+    modelTitle:"मॉडल के अंदर",
+    modelSub:"NHANES पर प्रशिक्षित, दो सर्वे वर्षों पर क्रॉस-वैलिडेटेड। सभी आंकड़े जैसे हैं वैसे।",
+    notTitle:"यह <em>क्या नहीं</em> है",
+    not1t:"निदान नहीं",not1d:"यह एक पैटर्न बताता है, बीमारी की पुष्टि नहीं करता। हर उच्च परिणाम के बाद उचित जांच ज़रूरी।",
+    not2t:"ब्लड टेस्ट का विकल्प नहीं",not2d:"क्विक मोड अनुमान है। क्लिनिकल मोड आपके लैब मानों का उपयोग करता है — असली रिपोर्ट अधिक विश्वसनीय।",
+    not3t:"सबके लिए सत्यापित नहीं",not3d:"प्रशिक्षण डेटा अमेरिकी वयस्कों का। बच्चों, गर्भावस्था, या पुरानी बीमारी वालों के लिए सत्यापित नहीं।",
+    not4t:"चिकित्सा उपकरण नहीं",not4d:"कोई FDA या CDSCO मंज़ूरी नहीं। यह स्क्रीनिंग सहायक है — स्मोक अलार्म जैसा, आग बुझाने वाला यंत्र नहीं।",
+    footAbout:"परिचय",footAboutText:"चार जीवनशैली-जनित रोगों के लिए ओपन-सोर्स स्क्रीनिंग सहायक, ग्रामीण भारत और सामुदायिक स्वास्थ्य कार्यकर्ताओं के लिए।",
+    footTech:"तकनीकी",footNot:"नहीं",footNotText:"चिकित्सा उपकरण नहीं।<br>FDA-अनुमोदित नहीं।<br>निदान उपकरण नहीं।",
+    emBtn:"आपातकाल",emTitle:"आपातकालीन सेवा",emBody:"अगर यह सच में आपातकाल है, नीचे से कॉल करें।",emNat:"राष्ट्रीय",emAmb:"एम्बुलेंस",emCancel:"रद्द करें",
+    fHeight:"ऊँचाई",fWeight:"वज़न",fWaist:"कमर",ftUnit:"फुट",inUnit:"इंच",lbUnit:"पाउंड",inWaist:"इंच",
+    fields:{age:"उम्र",sex:"लिंग",height_cm:"ऊँचाई (सेमी)",weight_kg:"वज़न (किग्रा)",waist_cm:"कमर (सेमी)",sbp:"सिस्टोलिक BP",dbp:"डायस्टोलिक BP",glucose:"फास्टिंग ग्लूकोज़ (mg/dL)",hba1c:"HbA1c (%)",chol:"कुल कोलेस्ट्रॉल (mg/dL)",hdl:"HDL (mg/dL)",trig:"ट्राइग्लिसराइड (mg/dL)",crp:"hs-CRP (mg/L)",activity_days:"सक्रिय दिन/सप्ताह",alt:"ALT (IU/L)",ast:"AST (IU/L)",alp:"ALP (IU/L)",ggt:"GGT (IU/L)",bili:"बिलीरुबिन (mg/dL)",albumin:"एल्ब्यूमिन (g/dL)",bun:"BUN (mg/dL)",acr:"यूरिन ACR (mg/g)",uric_acid:"यूरिक एसिड (mg/dL)",potassium:"पोटैशियम (mmol/L)",calcium:"कैल्शियम (mg/dL)",phosphorus:"फॉस्फोरस (mg/dL)",chloride:"क्लोराइड (mmol/L)"},
+    select:{sex:{label:"लिंग",options:[["1","पुरुष"],["2","महिला"]]},smoker:{label:"क्या अभी धूम्रपान करते हैं?",options:[["0","नहीं"],["1","हाँ"]]},diabetes:{label:"डायबिटीज़?",options:[["0","नहीं"],["1","हाँ"]]},bp_diag:{label:"क्या हाई BP का पता चला है?",options:[["0","नहीं"],["1","हाँ"]]},family_hx:{label:"हार्ट अटैक का पारिवारिक इतिहास?",options:[["0","नहीं"],["1","हाँ"]]},htn:{label:"हाई BP?",options:[["0","नहीं"],["1","हाँ"]]},activity:{label:"शारीरिक गतिविधि",options:[["0","नियमित (150+ मिनट/सप्ताह)"],["6","थोड़ी"],["12","बहुत कम/नहीं"]]},family_diabetes:{label:"डायबिटीज़ का पारिवारिक इतिहास",options:[["0","कोई नहीं"],["8","एक माता/पिता/भाई-बहन"],["16","कई"]]},family_heart:{label:"हृदय रोग का पारिवारिक इतिहास",options:[["0","कोई नहीं"],["8","एक"],["16","कई"]]},family_kidney:{label:"किडनी रोग का पारिवारिक इतिहास",options:[["0","कोई नहीं"],["8","एक"],["14","कई"]]},smoking:{label:"धूम्रपान",options:[["0","कभी नहीं"],["6","पहले"],["16","अभी"]]},bp_known:{label:"ज्ञात BP रेंज",options:[["0","सामान्य"],["6","थोड़ा बढ़ा"],["12","स्टेज 1"],["18","स्टेज 2"]]},chol_known:{label:"ज्ञात कोलेस्ट्रॉल",options:[["0","उचित"],["8","बॉर्डरलाइन"],["14","उच्च"]]},diabetes_status:{label:"डायबिटीज़ की स्थिति",options:[["0","नहीं"],["10","प्री-डायबिटीज़"],["20","हाँ"]]},diet:{label:"आम आहार",options:[["0","साबुत भोजन"],["5","मिश्रित"],["10","प्रोसेस्ड/मीठा"]]},alcohol:{label:"शराब सेवन",options:[["0","नहीं/कम"],["6","मध्यम"],["14","अधिक"]]},painkillers:{label:"दर्दनिवारक उपयोग",options:[["0","शायद ही कभी"],["8","कभी-कभी"],["16","अक्सर"]]}},
+    quick:{diabetes:["age","sex","height_cm","weight_kg","waist_cm","activity","family_diabetes","bp_diag","diet"],heart:["age","sex","height_cm","weight_kg","smoking","bp_known","chol_known","diabetes_status","activity","family_heart"],kidney:["age","diabetes_status","bp_diag","smoking","height_cm","weight_kg","painkillers","family_kidney"],fattyliver:["age","sex","height_cm","weight_kg","waist_cm","diabetes_status","diet","alcohol","activity"]},
+    clinical:{diabetes:["age","sex","height_cm","weight_kg","waist_cm","sbp","dbp","glucose","hba1c"],heart:["age","sex","height_cm","weight_kg","sbp","dbp","chol","hdl","trig","hba1c","crp","smoker","diabetes","activity_days","bp_diag","family_hx"],kidney:["age","sex","bun","acr","sbp","uric_acid","albumin","potassium","calcium","phosphorus","chloride","hba1c","diabetes","htn"],fattyliver:["age","sex","trig","hdl","alt","ast","alp","ggt","bili","albumin","glucose","diabetes"]}
+  }
+};
+
+const state = {lang:"en", cond:"diabetes", mode:"quick", units:"metric", ts:"normal", hc:false};
+const NUMERIC = new Set(["age","height_cm","weight_kg","waist_cm","sbp","dbp","glucose","hba1c","chol","hdl","trig","crp","alt","ast","alp","ggt","bili","albumin","bun","acr","uric_acid","potassium","calcium","phosphorus","chloride","activity_days"]);
+const EXTRA_LBL = {en:{bmi:"BMI",waist:"Waist",tg_hdl_ratio:"TG/HDL ratio",active_days:"Active days"},hi:{bmi:"BMI",waist:"कमर",tg_hdl_ratio:"TG/HDL अनुपात",active_days:"सक्रिय दिन"}};
+
+function t(k){const L=I18N[state.lang];if(k in L)return L[k];return k.split(".").reduce((o,x)=>o==null?null:o[x],L)??k;}
+function featLabel(k){return I18N[state.lang].fields[k]||(EXTRA_LBL[state.lang]&&EXTRA_LBL[state.lang][k])||k;}
+
+function applyI18n(){
+  document.documentElement.lang=state.lang;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{el.textContent=t(el.dataset.i18n)});
+  document.querySelectorAll("[data-i18n-html]").forEach(el=>{el.innerHTML=t(el.dataset.i18nHtml)});
+  document.getElementById("langBtn").textContent=t("langBtn");
+  document.getElementById("modeNote").textContent=t(state.mode==="quick"?"modeQuickNote":"modeClinNote");
+  const tabMap={diabetes:"tabDi",heart:"tabHe",kidney:"tabKi",fattyliver:"tabLi"};
+  document.querySelectorAll("#tabs button").forEach(b=>{const s=b.querySelector("span");if(s)s.textContent=t(tabMap[b.dataset.c])});
+  document.querySelectorAll("#modes button").forEach(b=>{const s=b.querySelector("span");if(s)s.textContent=t(b.dataset.m==="quick"?"modeQuick":"modeClin")});
+}
+
+function renderField(f){
+  if(f==="height_cm"){
+    if(state.units==="imperial") return `<div class="field span2"><label>${t("fHeight")} (${t("ftUnit")} / ${t("inUnit")})</label><div class="ftin"><input type="number" step="any" name="height_ft" placeholder="${t("ftUnit")}" min="3" max="8"><input type="number" step="any" name="height_in" placeholder="${t("inUnit")}" min="0" max="11"></div></div>`;
+    return `<div class="field span2"><label>${featLabel(f)}</label><input type="number" step="any" name="height_cm" min="100" max="230"></div>`;
+  }
+  if(f==="weight_kg"){
+    if(state.units==="imperial") return `<div class="field"><label>${t("fWeight")} (${t("lbUnit")})</label><input type="number" step="any" name="weight_lb" min="55" max="550"></div>`;
+    return `<div class="field"><label>${featLabel(f)}</label><input type="number" step="any" name="weight_kg" min="25" max="250"></div>`;
+  }
+  if(f==="waist_cm"){
+    if(state.units==="imperial") return `<div class="field"><label>${t("fWaist")} (${t("inWaist")})</label><input type="number" step="any" name="waist_in" min="16" max="79"></div>`;
+    return `<div class="field"><label>${featLabel(f)}</label><input type="number" step="any" name="waist_cm" min="40" max="200"></div>`;
+  }
+  if(NUMERIC.has(f)) return `<div class="field"><label>${featLabel(f)}</label><input type="number" step="any" name="${f}"></div>`;
+  const cfg=I18N[state.lang].select[f];
+  if(cfg){
+    const opts=cfg.options.map(([v,l])=>`<option value="${v}">${l}</option>`).join("");
+    return `<div class="field"><label>${cfg.label}</label><select name="${f}">${opts}</select></div>`;
+  }
+  return "";
+}
+
+function renderForm(){
+  const list=I18N[state.lang][state.mode][state.cond];
+  const form=document.getElementById("formCol");
+  if(!list){form.innerHTML="";return;}
+  let html='<div class="field-grid">'+list.map(renderField).filter(Boolean).join("")+'</div>';
+  html+=`<button type="button" class="calc-btn" id="calcBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>${t("calcBtn")}</button>`;
+  form.innerHTML=html;
+  document.getElementById("calcBtn").addEventListener("click",onCalc);
+}
+
+function collect(){
+  const o={};
+  document.querySelectorAll("#formCol input,#formCol select").forEach(el=>{o[el.name]=el.value});
+  if(state.units==="imperial"){
+    const ft=parseFloat(o.height_ft)||0, inn=parseFloat(o.height_in)||0;
+    if(ft||inn) o.height_cm=(ft*12+inn)*2.54;
+    if(o.weight_lb) o.weight_kg=parseFloat(o.weight_lb)*0.453592;
+    if(o.waist_in) o.waist_cm=parseFloat(o.waist_in)*2.54;
+  }
+  return o;
+}
+
+function agePts(v){return v<35?0:v<45?3:v<55?6:v<65?9:12}
+function bmiPts(b){return b<23?0:b<25?3:b<30?6:9}
+function waistPts(w,s){return w<(s===1?90:80)?0:5}
+function bmiOf(h,w){return h>0&&w>0?w/Math.pow(h/100,2):null}
+
+function computeQuick(cond,v){
+  const bmi=bmiOf(+v.height_cm,+v.weight_kg);
+  const sex=parseInt(v.sex);
+  let pts=0,facs=[];
+  const add=(lbl,p)=>{pts+=p;if(p>0)facs.push({label:lbl,p})};
+  if(cond==="diabetes"){
+    add(t("fields.age"),agePts(+v.age));
+    if(bmi)add("BMI",bmiPts(bmi));
+    if(v.waist_cm)add(t("fields.waist_cm"),waistPts(+v.waist_cm,sex));
+    add(t("select.activity.label"),+v.activity);
+    add(t("select.family_diabetes.label"),+v.family_diabetes);
+    add(t("select.bp_diag.label"),+v.bp_diag);
+    add(t("select.diet.label"),+v.diet);
+    if(sex===1)add(t("fields.sex"),1);
+    return {pts,max:75,facs};
+  }
+  if(cond==="heart"){
+    add(t("fields.age"),agePts(+v.age));
+    add(t("fields.sex"),sex===1?2:0);
+    if(bmi)add("BMI",bmiPts(bmi));
+    add(t("select.smoking.label"),+v.smoking);
+    add(t("select.bp_known.label"),+v.bp_known);
+    add(t("select.chol_known.label"),+v.chol_known);
+    add(t("select.diabetes_status.label"),+v.diabetes_status);
+    add(t("select.activity.label"),+v.activity);
+    add(t("select.family_heart.label"),+v.family_heart);
+    return {pts,max:113,facs};
+  }
+  if(cond==="kidney"){
+    add(t("fields.age"),agePts(+v.age));
+    add(t("select.diabetes_status.label"),+v.diabetes_status);
+    add(t("select.bp_diag.label"),+v.bp_diag);
+    add(t("select.smoking.label"),+v.smoking);
+    if(bmi)add("BMI",bmiPts(bmi));
+    add(t("select.painkillers.label"),+v.painkillers);
+    add(t("select.family_kidney.label"),+v.family_kidney);
+    return {pts,max:90,facs};
+  }
+  if(cond==="fattyliver"){
+    add(t("fields.age"),agePts(+v.age));
+    add(t("fields.sex"),sex===1?1:0);
+    if(bmi)add("BMI",bmiPts(bmi));
+    if(v.waist_cm)add(t("fields.waist_cm"),waistPts(+v.waist_cm,sex));
+    add(t("select.diabetes_status.label"),+v.diabetes_status);
+    add(t("select.diet.label"),+v.diet);
+    add(t("select.alcohol.label"),+v.alcohol);
+    add(t("select.activity.label"),+v.activity);
+    return {pts,max:79,facs};
+  }
+}
+
+function buildVector(cond,v){
+  const bmi=bmiOf(+v.height_cm,+v.weight_kg);
+  const f={};
+  if(cond==="diabetes"){f.age=+v.age;f.sex=+v.sex;f.bmi=bmi;f.waist=+v.waist_cm||null;f.sbp=+v.sbp||null;f.dbp=+v.dbp||null;f.glucose=+v.glucose||null;f.hba1c=+v.hba1c||null;}
+  else if(cond==="heart"){f.age=+v.age;f.sex=+v.sex;f.bmi=bmi;f.sbp=+v.sbp||null;f.dbp=+v.dbp||null;f.chol=+v.chol||null;f.hdl=+v.hdl||null;f.trig=+v.trig||null;f.hba1c=+v.hba1c||null;f.crp=+v.crp||null;f.smoker=v.smoker!==undefined?+v.smoker:null;f.diabetes=v.diabetes!==undefined?+v.diabetes:null;f.active_days=+v.activity_days||null;f.bp_diagnosed=v.bp_diag!==undefined?+v.bp_diag:null;f.family_hx=v.family_hx!==undefined?+v.family_hx:null;}
+  else if(cond==="kidney"){f.age=+v.age;f.sex=+v.sex;f.bun=+v.bun||null;f.acr=+v.acr||null;f.sbp=+v.sbp||null;f.uric_acid=+v.uric_acid||null;f.albumin=+v.albumin||null;f.potassium=+v.potassium||null;f.calcium=+v.calcium||null;f.phosphorus=+v.phosphorus||null;f.chloride=+v.chloride||null;f.hba1c=+v.hba1c||null;f.diabetes=v.diabetes!==undefined?+v.diabetes:null;f.htn=v.htn!==undefined?+v.htn:null;}
+  else if(cond==="fattyliver"){f.age=+v.age;f.sex=+v.sex;const trig=+v.trig,hdl=+v.hdl;f.tg_hdl_ratio=(trig>0&&hdl>0)?trig/hdl:null;f.alt=+v.alt||null;f.ast=+v.ast||null;f.alp=+v.alp||null;f.ggt=+v.ggt||null;f.bili=+v.bili||null;f.albumin=+v.albumin||null;f.hdl=hdl||null;f.glucose=+v.glucose||null;f.diabetes=v.diabetes!==undefined?+v.diabetes:null;}
+  return f;
+}
+
+function predict(cond,feat){
+  const m=MODELS[cond];
+  let logit=m.intercept;
+  const cs=[];
+  for(const k of m.features){
+    let x=feat[k];
+    if(x===null||x===undefined||Number.isNaN(x))x=m.impute_median[k];
+    const z=(x-m.scaler_mean[k])/m.scaler_scale[k];
+    const c=m.coef[k]*z;
+    logit+=c;
+    cs.push({name:k,contribution:c});
+  }
+  const cal=m.platt_a*logit+m.platt_b;
+  const prob=1/(1+Math.exp(-cal));
+  cs.sort((a,b)=>Math.abs(b.contribution)-Math.abs(a.contribution));
+  return {prob,cs,m};
+}
+
+function onCalc(){
+  const v=collect();
+  if(!v.age){alert(t("fields.age")+"?");return;}
+  if(state.mode==="quick"){
+    const r=computeQuick(state.cond,v);
+    const score=(r.pts/r.max)*100;
+    const band=score<33?"low":score<67?"mod":"high";
+    renderResult({mode:"quick",score,band,facs:r.facs,le:33,hs:67});
+  }else{
+    const feat=buildVector(state.cond,v);
+    const {prob,cs,m}=predict(state.cond,feat);
+    const le=m.threshold_moderate*100;
+    const hs=m.threshold_high*100;
+    const score=prob*100;
+    const band=prob<m.threshold_moderate?"low":prob<m.threshold_high?"mod":"high";
+    renderResult({mode:"clinical",score,band,cs:cs.slice(0,5),le,hs});
+  }
+}
+
+function renderResult(r){
+  const area=document.getElementById("resultCol");
+  const bandLabel=t(r.band==="low"?"bandLow":r.band==="mod"?"bandMod":"bandHigh");
+  const pos=Math.min(100,Math.max(0,r.score));
+  const le=Math.max(1,Math.min(98,r.le));
+  const hs=Math.max(le+1,Math.min(99,r.hs));
+  let html=`<div class="result">
+    <div class="res-head"><span class="res-meta">${t("resultReport")}</span><span class="res-band ${r.band}">${bandLabel}</span></div>
+    <div class="res-score"><span class="num">${Math.round(r.score)}</span><span class="of">/100</span></div>
+    <div class="res-lbl">${t("resultScore")}</div>
+    <div class="res-strip">
+      <span class="seg g" style="width:${le}%"></span>
+      <span class="seg a" style="width:${hs-le}%"></span>
+      <span class="seg r" style="width:${100-hs}%"></span>
+      <span class="m" style="left:${pos}%"></span>
+    </div>
+    <div class="res-strip-lbl"><span>0</span><span>${Math.round(le)}</span><span>${Math.round(hs)}</span><span>100</span></div>
+    <div class="res-factors-title">${t("resultFactors")}</div>
+    <ul class="res-factors">`;
+  if(r.mode==="clinical"){
+    for(const c of r.cs){
+      const up=c.contribution>0;
+      const sign=up?"+":"";
+      html+=`<li><span class="name">${featLabel(c.name)}</span><span class="val ${up?'up':'dn'}">${sign}${c.contribution.toFixed(2)}</span></li>`;
+    }
+  }else{
+    for(const f of r.facs.slice(0,5)){
+      html+=`<li><span class="name">${f.label}</span><span class="val up">+${f.p}</span></li>`;
+    }
+  }
+  const at=r.band==="low"?"advLowT":r.band==="mod"?"advModT":"advHighT";
+  const ab=r.band==="low"?"advLowB":r.band==="mod"?"advModB":"advHighB";
+  html+=`</ul>
+    <div class="res-advice ${r.band}"><h4>${t(at)}</h4><p>${t(ab)}</p></div>
+    <div class="res-disc">${t("disc")}</div>
+  </div>`;
+  area.innerHTML=html;
+  if(window.innerWidth<820)setTimeout(()=>area.scrollIntoView({behavior:"smooth",block:"start"}),100);
+}
+
+function emptyMarkup(){
+  return `<div class="result-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 3v3M16 3v3M8 14h3M8 17h6M14 14h2"/></svg><p>${t("emptyMsg")}</p></div>`;
+}
+
+function renderAll(){
+  applyI18n();
+  renderForm();
+  document.getElementById("resultCol").innerHTML=emptyMarkup();
+}
+
+// Language toggle
+document.getElementById("langBtn").addEventListener("click",()=>{
+  state.lang=state.lang==="en"?"hi":"en";
+  const vals={};
+  document.querySelectorAll("#formCol input,#formCol select").forEach(el=>{vals[el.name]=el.value});
+  renderAll();
+  Object.entries(vals).forEach(([k,v])=>{const el=document.querySelector(`#formCol [name="${k}"]`);if(el)el.value=v});
+});
+
+// Tabs
+document.querySelectorAll("#tabs button").forEach(b=>{
+  b.addEventListener("click",()=>{
+    state.cond=b.dataset.c;
+    document.querySelectorAll("#tabs button").forEach(x=>x.classList.toggle("active",x===b));
+    renderForm();
+    document.getElementById("resultCol").innerHTML=emptyMarkup();
+  });
+});
+
+// Mode
+document.querySelectorAll("#modes button").forEach(b=>{
+  b.addEventListener("click",()=>{
+    state.mode=b.dataset.m;
+    document.querySelectorAll("#modes button").forEach(x=>x.classList.toggle("active",x===b));
+    document.getElementById("modeNote").textContent=t(state.mode==="quick"?"modeQuickNote":"modeClinNote");
+    renderForm();
+    document.getElementById("resultCol").innerHTML=emptyMarkup();
+  });
+});
+
+// Units
+document.querySelectorAll(".a11y-group button[data-u]").forEach(b=>{
+  b.addEventListener("click",()=>{
+    state.units=b.dataset.u;
+    document.querySelectorAll(".a11y-group button[data-u]").forEach(x=>x.classList.toggle("active",x===b));
+    renderForm();
+    document.getElementById("resultCol").innerHTML=emptyMarkup();
+  });
+});
+
+// Text size
+document.querySelectorAll(".a11y-group button[data-ts]").forEach(b=>{
+  b.addEventListener("click",()=>{
+    state.ts=b.dataset.ts;
+    document.body.classList.remove("ts-large","ts-xlarge");
+    if(state.ts==="large") document.body.classList.add("ts-large");
+    if(state.ts==="xlarge") document.body.classList.add("ts-xlarge");
+    document.querySelectorAll(".a11y-group button[data-ts]").forEach(x=>x.classList.toggle("active",x===b));
+  });
+});
+
+// Contrast
+document.querySelectorAll(".a11y-group button[data-c]").forEach(b=>{
+  b.addEventListener("click",()=>{
+    state.hc=b.dataset.c==="high";
+    document.body.classList.toggle("hc",state.hc);
+    document.querySelectorAll(".a11y-group button[data-c]").forEach(x=>x.classList.toggle("active",x===b));
+  });
+});
+
+// Emergency
+function openEm(){document.getElementById("emOverlay").classList.add("open")}
+function closeEm(){document.getElementById("emOverlay").classList.remove("open")}
+document.getElementById("emOverlay").addEventListener("click",e=>{if(e.target===document.getElementById("emOverlay"))closeEm()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeEm()});
+
+// Reveal on scroll
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("vis");io.unobserve(e.target)}});
+},{threshold:.1});
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+
+// Boot
+if(typeof MODELS==="undefined"){
+  document.body.innerHTML='<div style="padding:60px;text-align:center;font-family:sans-serif;color:#142033"><h1>models.js not loaded</h1><p>Place models.js in the same folder as index.html</p></div>';
+}else{
+  renderAll();
+}
+</script>
+<script>
+(function(){
+  const container = document.getElementById('modelCards');
+  if (!container || typeof MODELS === 'undefined') return;
+
+  const NAMES = {
+    diabetes:{en:'Diabetes',hi:'डायबिटीज़'},
+    heart:{en:'Heart disease',hi:'हृदय रोग'},
+    kidney:{en:'Kidney disease',hi:'किडनी रोग'},
+    fattyliver:{en:'Fatty liver',hi:'फैटी लिवर'}
+  };
+  const LIMITS = {
+    diabetes:'Glucose and HbA1c are in both the label and the feature set — this reads the lab report, not pure prediction.',
+    heart:'Label is self-reported heart disease from a survey. High-band precision is limited by that, not by the model.',
+    kidney:'Label is eGFR under 60. Creatinine is deliberately excluded from features to avoid a label leak.',
+    fattyliver:'Label is Fatty Liver Index (FLI) — a validated proxy score, not ultrasound. GGT is partly circular with FLI.'
+  };
+  const FALLBACK = {
+    diabetes:{mm:{accuracy:76.4,precision:44.9,recall:92.5,f1:60.5},mh:{accuracy:92.2,precision:98.9,recall:60.8,f1:75.3},cv:'0.937 ±.009',cross:'—',n:11260,auc:0.939,ci:[0.925,0.952]},
+    heart:{mm:{accuracy:71.6,precision:21.2,recall:90.3,f1:34.4},mh:{accuracy:85.5,precision:30.7,recall:60.8,f1:40.8},cv:'0.867 ±.007',cross:'0.853',n:11287,auc:0.868,ci:[0.847,0.891]},
+    kidney:{mm:{accuracy:82.9,precision:31.0,recall:90.2,f1:46.2},mh:{accuracy:93.7,precision:61.5,recall:60.4,f1:60.9},cv:'0.937 ±.015',cross:'0.911',n:10064,auc:0.937,ci:[0.919,0.951]},
+    fattyliver:{mm:{accuracy:74.2,precision:66.4,recall:90.0,f1:76.4},mh:{accuracy:74.2,precision:79.0,recall:60.6,f1:68.6},cv:'0.821 ±.009',cross:'0.852',n:4198,auc:0.843,ci:[0.814,0.867]}
+  };
+
+  const lang = () => document.documentElement.lang || 'en';
+  const fmt = v => (typeof v === 'number') ? v.toFixed(1) + '%' : '—';
+  const fmtAuc = v => (typeof v === 'number') ? v.toFixed(3) : '—';
+  const fmtCi = ci => Array.isArray(ci) && ci.length === 2 ? '[' + ci[0].toFixed(3) + '–' + ci[1].toFixed(3) + ']' : '';
+
+  function render(){
+    container.innerHTML = '';
+    const L = lang();
+    for (const key of ['diabetes','heart','kidney','fattyliver']) {
+      const m = MODELS[key] || {};
+      const fb = FALLBACK[key];
+      const name = NAMES[key][L] || NAMES[key].en;
+      const mm = m.metrics_moderate || fb.mm;
+      const mh = m.metrics_high || fb.mh;
+      const auc = (typeof m.auc === 'number') ? m.auc : fb.auc;
+      const ci = Array.isArray(m.auc_ci) ? m.auc_ci : fb.ci;
+      const cv = (typeof m.cv_auc_mean === 'number') ? (m.cv_auc_mean.toFixed(3) + ' ±' + (m.cv_auc_std || 0).toFixed(3)) : fb.cv;
+      const cross = m.cross_cycle && typeof m.cross_cycle.auc === 'number' ? m.cross_cycle.auc.toFixed(3) : fb.cross;
+      const n = m.n_total || fb.n;
+
+      const card = document.createElement('div');
+      card.className = 'mcard';
+      card.innerHTML =
+        '<div class="mcard-head">' +
+          '<h3>' + name + '</h3>' +
+          '<div class="auc-badge">AUC ' + fmtAuc(auc) + '</div>' +
+        '</div>' +
+        '<div class="mcard-sub">Area under the ROC curve ' + fmtCi(ci) + '</div>' +
+        '<div class="mcard-section">' +
+          '<div class="mcard-section-title">Moderate band · screening trigger</div>' +
+          '<div class="mcard-metrics">' +
+            '<div class="mcard-metric"><div class="v">' + fmt(mm.accuracy) + '</div><div class="l">Accuracy</div></div>' +
+            '<div class="mcard-metric"><div class="v">' + fmt(mm.precision) + '</div><div class="l">Precision</div></div>' +
+            '<div class="mcard-metric"><div class="v">' + fmt(mm.recall) + '</div><div class="l">Recall</div></div>' +
+            '<div class="mcard-metric"><div class="v">' + fmt(mm.f1) + '</div><div class="l">F1</div></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="mcard-section">' +
+          '<div class="mcard-section-title">High band · referral trigger</div>' +
+          '<div class="mcard-metrics">' +
+            '<div class="mcard-metric"><div class="v">' + fmt(mh.accuracy) + '</div><div class="l">Accuracy</div></div>' +
+            '<div class="mcard-metric"><div class="v">' + fmt(mh.precision) + '</div><div class="l">Precision</div></div>' +
+            '<div class="mcard-metric"><div class="v">' + fmt(mh.recall) + '</div><div class="l">Recall</div></div>' +
+            '<div class="mcard-metric"><div class="v">' + fmt(mh.f1) + '</div><div class="l">F1</div></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="mcard-info">' +
+          '<span><b>n</b> ' + Number(n).toLocaleString() + '</span>' +
+          '<span><b>CV AUC</b> ' + cv + '</span>' +
+          '<span><b>Cross-cycle</b> ' + cross + '</span>' +
+        '</div>' +
+        '<div class="mcard-limit">' + LIMITS[key] + '</div>';
+      container.appendChild(card);
+    }
+  }
+
+  render();
+
+  const langBtn = document.getElementById('langBtn');
+  if (langBtn) {
+    langBtn.addEventListener('click', () => setTimeout(render, 60));
+  }
+})();
+</script>
+
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  if (typeof MODELS === 'undefined') return;
+  const cards = document.querySelectorAll('.cond');
+  const keys = ['diabetes', 'heart', 'kidney', 'fattyliver'];
+  
+  cards.forEach((card, i) => {
+    const key = keys[i];
+    const m = MODELS[key];
+    if (!m || !m.metrics_moderate) return;
+    
+    // Pull the metrics for the moderate (screening) threshold
+    const mm = m.metrics_moderate;
+    const meta = card.querySelector('.cond-meta');
+    
+    if (meta) {
+      meta.innerHTML += `<br><span style="margin-top:10px;display:inline-block;color:var(--teal-d);font-weight:600">
+        Acc ${mm.accuracy}% &nbsp;·&nbsp; Prec ${mm.precision}% &nbsp;·&nbsp; Rec ${mm.recall}%
+      </span>`;
+    }
+  });
+});
+</script>
+</body>
+</html>

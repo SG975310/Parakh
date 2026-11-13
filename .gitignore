@@ -1,0 +1,11 @@
+# Python stuff
+__pycache__/
+*.pyc
+
+# Don't upload the huge NHANES raw data files
+data/raw/
+data/clean/
+
+# Don't upload Mac/Windows junk
+.DS_Store
+Thumbs.db
